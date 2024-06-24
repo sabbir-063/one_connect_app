@@ -13,7 +13,7 @@ class DonationPostCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      elevation: 20,
+      elevation: 10,
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(

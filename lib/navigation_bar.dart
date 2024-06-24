@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:one_connect_app/features/DonationPage/screens/donation.dart';
+import 'package:one_connect_app/features/DonatorsPage/screens/donator_list.dart';
 import 'features/HomePage/screens/HomeScreen/home.dart';
-import 'utils/constants/colors.dart';
-import 'utils/helpers/helper_functions.dart';
+import 'features/ProfilePage/screens/profile.dart';
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndx = 0.obs;
 
   final screens = [
     const HomeScreen(),
-    Container(
-      color: Colors.green,
-    ),
-    Container(
-      color: Colors.blue,
-    ),
-    Container(
-      color: Colors.orange,
-    ),
+    const DonationPageScreen(),
+    const DonatorListScreen(),
+    const ProfileScreen(),
   ];
 }
 
@@ -29,27 +23,39 @@ class NavigationBarMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
-    final dark = OneHelperFunctions.isDarkMode(context);
 
     return Scaffold(
       bottomNavigationBar: Obx(
-        () => NavigationBar(
+        () => SizedBox(
           height: 80,
-          elevation: 0,
-          selectedIndex: controller.selectedIndx.value,
-          onDestinationSelected: (indx) => controller.selectedIndx.value = indx,
-          // backgroundColor: dark ? OneColors.grey : OneColors.grey,
-          indicatorColor: dark
-              ? OneColors.white.withOpacity(0.1)
-              : const Color.fromARGB(255, 15, 104, 152).withOpacity(0.1),
-          destinations: const [
-            NavigationDestination(icon: Icon(Iconsax.home), label: "Home"),
-            NavigationDestination(
-                icon: Icon(Iconsax.heart_add), label: "Donation"),
-            NavigationDestination(
-                icon: Icon(Iconsax.folder4), label: "Donators"),
-            NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
-          ],
+          child: BottomNavigationBar(
+            currentIndex: controller.selectedIndx.value,
+            onTap: (indx) => controller.selectedIndx.value = indx,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.black,
+            iconSize: 25,
+            selectedFontSize: 14,
+            unselectedFontSize: 12,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Iconsax.home),
+                label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Iconsax.heart_add),
+                label: "Donation",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Iconsax.folder4),
+                label: "Donators",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Iconsax.user),
+                label: "Profile",
+              ),
+            ],
+          ),
         ),
       ),
       body: Obx(() => controller.screens[controller.selectedIndx.value]),

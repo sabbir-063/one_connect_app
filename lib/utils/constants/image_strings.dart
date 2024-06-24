@@ -8,10 +8,10 @@ class OneImages {
   static const String facebook = "assets/logos/facebook-icon.png";
 
   //OnBoarding Images
-  static const onBoardingImage1 =
-      "assets/images/on_boarding_images/onboarding_1.png";
+  static const onBoardingImage1 = "assets/images/onboarding/check.png";
   static const onBoardingImage2 =
-      "assets/images/on_boarding_images/onboarding_2.png";
-  static const onBoardingImage3 =
-      "assets/images/on_boarding_images/onboarding_3.png";
+      "assets/images/onboarding/sammy-line-come-back-later.png";
+
+  //profile pic
+  static const sabbirProfile = "assets/images/profile/sabbir_profile_pic.jpg";
 }

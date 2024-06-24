@@ -26,6 +26,9 @@ dependencies:
   get_storage: ^2.1.1
   flutter_native_splash: ^2.4.0
   smooth_page_indicator: ^1.1.0
+  page_transition: ^2.1.0
+  curved_navigation_bar: ^1.0.6
+  image_picker: ^1.1.2
 
 
 dev_dependencies:
@@ -42,7 +45,8 @@ flutter:
 
   assets:
     - assets/logos/
-    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/profile/
 
 
 #  fonts:
