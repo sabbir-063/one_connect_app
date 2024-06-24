@@ -1,4 +1,7 @@
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:one_connect_app/common/styles/spacing_styles.dart';
+import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
 import 'package:one_connect_app/utils/constants/sizes.dart';
 import 'package:one_connect_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -13,25 +16,43 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: OneSpacingStyles.paddingWithAppBarHeight,
           child: Column(
             children: [
               /// login, title, sub title
-              LoginTitle(),
+              const LoginTitle(),
 
               /// Form
-              OneForm(),
+              const OneForm(),
 
               //Divider
-              DividerText(dividerText: OneTexts.signInWith),
+              const DividerText(dividerText: OneTexts.signInWith),
 
-              SizedBox(height: OneSizes.spaceBtwSections / 2),
+              const SizedBox(height: OneSizes.spaceBtwSections / 2),
 
               //Footer
-              Footer(),
+              const Footer(),
+
+              const SizedBox(height: OneSizes.spaceBtwSections),
+
+              GestureDetector(
+                  onTap: () {
+                    Get.to(() => const AdminLoginScreen());
+                  },
+                  child: const Text(
+                    "Login as Admin",
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.blue,
+                      // fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blue,
+                      decorationThickness: 1,
+                    ),
+                  )),
             ],
           ),
         ),
