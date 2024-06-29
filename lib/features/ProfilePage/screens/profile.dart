@@ -1,138 +1,212 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+import '../../../data/static_data/post_data/post_card_data.dart';
+import '../../../models/UserModel/user_model.dart';
+import '../../HomePage/screens/community/donation_post_card.dart';
 
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen({super.key});
+  final UserModel user = UserModel(
+    firstName: 'Mohammad',
+    lastName: 'Sabbir',
+    email: 'sabbir.musfique01@gmail.com',
+    phone: '01884952804',
+    country: 'Bangladesh',
+    state: 'Lakshmipur',
+    city: 'Ramganj',
+    birthday: '2002-06-25',
+    password: 'examplepassword',
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.bottomLeft,
-              children: [
-                // Cover photo
-                Image.asset(
-                  'assets/images/profile/cover_photo.jpg',
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-                const Positioned(
-                  bottom: -60,
-                  left: 20,
-                  child: Stack(
-                    children: [
-                      // Profile photo
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundImage: AssetImage(
-                            'assets/images/profile/sabbir_profile_pic.jpg'),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          radius: 20,
-                          child: Icon(Icons.camera_alt, color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 70),
-            Padding(
-              padding: const EdgeInsets.all(16),
+      appBar: AppBar(
+        title: const Text('My Profile'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          PopupMenuButton<int>(
+            icon: const Icon(Icons.menu),
+            onSelected: (item) => onSelected(context, item),
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text('Profile Edit'),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text('Notifications'),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text('Logout'),
+              ),
+            ],
+          ),
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Mohammad Sabbir Musfique',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  // Profile Picture
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage(
+                        'assets/images/profile/sabbir_profile_pic.jpg'), // Placeholder or actual image URL
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Assalamualaikum\nCSE-21, MIST\nLast Blood Donate(O+) : 5 May 2024',
-                    style: TextStyle(fontSize: 16),
+                  const SizedBox(height: 10),
+                  // User Name and Phone
+                  Text(
+                    '${user.firstName} ${user.lastName}',
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  const SizedBox(height: 5),
+                  Text(
+                    user.phone,
+                    style: const TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 20),
+                  // Donation Stats
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(
-                        height: 50,
-                        width: 110,
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          label: const Text('Edit Bio',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
+                      Column(
+                        children: [
+                          Text('Donations',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey)),
+                          Text('25,000 Tk',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ],
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: 110,
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.edit, color: Colors.black),
-                          label: const Text('Edit Profile',
-                              style: TextStyle(color: Colors.black)),
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
+                      Column(
+                        children: [
+                          Text('Received',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey)),
+                          Text('5,000 Tk',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ],
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: 110,
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.logout, color: Colors.red),
-                          label: const Text('Logout',
-                              style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Buttons for Donation History and Received Organization
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
                           onPressed: () {
-                            Get.to(() => const LoginScreen());
+                            // Navigate to Donation History
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              side: const BorderSide(color: Colors.red),
-                            ),
-                          ),
+                          child: const Text('Donation History'),
+                        ),
+                      ),
+                      const SizedBox(
+                          width: 10), // Small space between the buttons
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Navigate to Received Organization
+                          },
+                          child: const Text('Received Organization'),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   const Divider(),
+                  const SizedBox(height: 10),
+                  // Additional User Details
+                  UserDetailsItem(
+                    icon: Icons.email,
+                    label: user.email,
+                  ),
+                  UserDetailsItem(
+                    icon: Icons.cake,
+                    label: user.birthday,
+                  ),
+                  UserDetailsItem(
+                    icon: Icons.location_on,
+                    label: '${user.city}, ${user.state}, ${user.country}',
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "My posts",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          // List of Posts
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final post = PostCardData.postCardData[index];
+                return post.profileName == 'Mohammad Sabbir'
+                    ? DonationPostCard(post: post)
+                    : const SizedBox.shrink();
+              },
+              childCount: PostCardData.postCardData.length,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
+class UserDetailsItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
 
+  const UserDetailsItem({super.key, required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.grey),
+          const SizedBox(width: 10),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void onSelected(BuildContext context, int item) {
+  switch (item) {
+    case 0:
+      // Navigate to Edit Profile
+      break;
+    case 1:
+      // Notification Action
+      break;
+    case 2:
+      // Logout Action
+      break;
+  }
+}
 
 // import 'package:flutter/material.dart';
 // import 'package:one_connect_app/utils/constants/image_strings.dart';

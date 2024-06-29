@@ -6,7 +6,7 @@ import 'package:one_connect_app/features/AdminHomePage/screens/admin_home.dart';
 import 'package:one_connect_app/features/AdminProfile/screens/admin_profile.dart';
 import 'package:one_connect_app/features/AdminUserList/screens/admin_userlist.dart';
 
-class NavigationController extends GetxController {
+class AdminNavigationController extends GetxController {
   final Rx<int> selectedIndx = 0.obs;
 
   final screens = [
@@ -22,7 +22,7 @@ class AdminNavigationBarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final controller = Get.put(AdminNavigationController());
 
     return Scaffold(
       bottomNavigationBar: Obx(

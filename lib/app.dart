@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: OneAppTheme.lightTheme,
-      darkTheme: OneAppTheme.darkTheme,
+      // darkTheme: OneAppTheme.darkTheme,
       home: const OnBoardingScreen(),
       // home: const Scaffold(),
     );

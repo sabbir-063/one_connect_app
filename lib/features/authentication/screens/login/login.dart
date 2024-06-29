@@ -39,20 +39,23 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: OneSizes.spaceBtwSections),
 
               GestureDetector(
-                  onTap: () {
-                    Get.to(() => const AdminLoginScreen());
-                  },
-                  child: const Text(
-                    "Login as Admin",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.blue,
-                      // fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.blue,
-                      decorationThickness: 1,
-                    ),
-                  )),
+                onTap: () {
+                  Get.to(() => const AdminLoginScreen());
+                },
+                child: const Text(
+                  "Login as Admin",
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.blue,
+                    // fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.blue,
+                    decorationThickness: 1,
+                  ),
+                ),
+              ),
+
+              ///
             ],
           ),
         ),

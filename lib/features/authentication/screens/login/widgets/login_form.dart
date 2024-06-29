@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../navigation_bar.dart';
+import '../../../../../testNavBar.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 
@@ -68,6 +69,7 @@ class OneForm extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => Get.to(const NavigationBarMenu()),
+                // onPressed: () => Get.to(const CurvedNavigationBar()),
                 child: const Text(OneTexts.signIn),
               ),
             ),

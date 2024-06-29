@@ -10,30 +10,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostCardData postData = PostCardData();
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            /// Create Post Sectioon
-            const PostSection(),
-
-            ///Community Post Section
-            Container(
-              margin: const EdgeInsets.all(1),
-              height: MediaQuery.of(context).size.height,
-              child: ListView.builder(
-                itemCount: postData.postCardData.length,
-                itemBuilder: (context, index) {
-                  final post = postData.postCardData[index];
-                  return DonationPostCard(post: post);
-                },
-              ),
+      body: CustomScrollView(
+        slivers: [
+          // Create Post Section
+          const SliverToBoxAdapter(
+            child: PostSection(),
+          ),
+          // Community Post Section
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final post = PostCardData.postCardData[index];
+                return DonationPostCard(post: post);
+              },
+              childCount: PostCardData.postCardData.length,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

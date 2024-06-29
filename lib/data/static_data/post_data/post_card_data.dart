@@ -259,11 +259,11 @@ class PostCardData {
 */
 
 class PostCardData {
-  final List<PostCardModel> postCardData = [
+  static List<PostCardModel> postCardData = [
     PostCardModel(
-      profileName: 'John Doe',
+      profileName: 'Mohammad Sabbir',
       profilePicUrl:
-          'https://images.unsplash.com/photo-1552058544-f2b08422138a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzF8MHwxfGFsbHwxfHx8fHx8fHwxNjEyODUxNTU3&ixlib=rb-1.2.1&q=80&w=400',
+          'https://images.unsplash.com/photo-1719656037678-ca9907d0b960?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       timeAgo: '2h ago',
       postMessage: 'Help! I need money for medical expenses. Can anyone help?',
       donationNeeded: 5000,
@@ -279,9 +279,9 @@ class PostCardData {
       donationRaised: 1500,
     ),
     PostCardModel(
-      profileName: 'Bob Brown',
+      profileName: 'Mohammad Sabbir',
       profilePicUrl:
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzF8MHwxfGFsbHw0fHx8fHx8fHwxNjEyODUxNTU3&ixlib=rb-1.2.1&q=80&w=400',
+          'https://images.unsplash.com/photo-1719656037678-ca9907d0b960?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       timeAgo: '4 days ago',
       postMessage: 'Support needed for a community project.',
       donationNeeded: 8000,
@@ -351,9 +351,9 @@ class PostCardData {
       donationRaised: 2700,
     ),
     PostCardModel(
-      profileName: 'Jake Kim',
+      profileName: 'Mohammad Sabbir',
       profilePicUrl:
-          'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzF8MHwxfGFsbHw4fHx8fHx8fHwxNjEyODUxNTU3&ixlib=rb-1.2.1&q=80&w=400',
+          'https://images.unsplash.com/photo-1719656037678-ca9907d0b960?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       timeAgo: '11 days ago',
       postMessage: 'Raising funds for a community garden.',
       donationNeeded: 5000,

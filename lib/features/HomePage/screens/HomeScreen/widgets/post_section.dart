@@ -29,7 +29,7 @@ class PostSection extends StatelessWidget {
             children: [
               const CircleAvatar(
                 backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzF8MHwxfGFsbHwzfHx8fHx8fHwxNjEyODUxNTU3&ixlib=rb-1.2.1&q=80&w=400'), // Replace with your image URL
+                    'https://images.unsplash.com/photo-1719656037678-ca9907d0b960?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Replace with your image URL
                 radius: 20,
               ),
               const SizedBox(width: 10),

@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:one_connect_app/features/DonationPage/screens/donation.dart';
 import 'package:one_connect_app/features/DonatorsPage/screens/donator_list.dart';
+import 'package:one_connect_app/features/MessagePage/screens/messages.dart';
 import 'features/HomePage/screens/HomeScreen/home.dart';
 import 'features/ProfilePage/screens/profile.dart';
+import 'features/notification/screens/notification.dart';
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndx = 0.obs;
@@ -12,8 +14,10 @@ class NavigationController extends GetxController {
   final screens = [
     const HomeScreen(),
     const DonationPageScreen(),
+    MessagesScreen(),
     const DonatorListScreen(),
-    const ProfileScreen(),
+    // const NotificationScreen(),
+    ProfileScreen(),
   ];
 }
 
@@ -25,6 +29,7 @@ class NavigationBarMenu extends StatelessWidget {
     final controller = Get.put(NavigationController());
 
     return Scaffold(
+      body: Obx(() => controller.screens[controller.selectedIndx.value]),
       bottomNavigationBar: Obx(
         () => SizedBox(
           height: 80,
@@ -37,6 +42,8 @@ class NavigationBarMenu extends StatelessWidget {
             iconSize: 25,
             selectedFontSize: 14,
             unselectedFontSize: 12,
+            // unselectedLabelStyle: TextStyle(fontSize: 12),
+            // selectedLabelStyle: TextStyle(fontSize: 12),
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.home),
@@ -47,9 +54,17 @@ class NavigationBarMenu extends StatelessWidget {
                 label: "Donation",
               ),
               BottomNavigationBarItem(
+                icon: Icon(Iconsax.message),
+                label: "Messages",
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(Iconsax.folder4),
                 label: "Donators",
               ),
+              // BottomNavigationBarItem(
+              //   icon: Icon(Iconsax.notification),
+              //   label: "Notification",
+              // ),
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.user),
                 label: "Profile",
@@ -58,7 +73,6 @@ class NavigationBarMenu extends StatelessWidget {
           ),
         ),
       ),
-      body: Obx(() => controller.screens[controller.selectedIndx.value]),
     );
   }
 }

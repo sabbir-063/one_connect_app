@@ -30,6 +30,8 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   image_picker: ^1.1.2
   faker: ^2.1.0
+  csc_picker: ^0.2.7
+  carousel_slider: ^4.2.1
 
 
 dev_dependencies:
@@ -48,6 +50,7 @@ flutter:
     - assets/logos/
     - assets/images/onboarding/
     - assets/images/profile/
+    - assets/images/donation/
 
 
 #  fonts:
