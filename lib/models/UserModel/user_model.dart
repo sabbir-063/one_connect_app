@@ -1,16 +1,19 @@
-class UserModel {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String phone;
-  final String country;
-  final String state;
-  final String city;
-  final String birthday;
-  final String password;
-  final int donationGiven = 0;
-  final int donationReceived = 0;
+import '../../features/AdminUserList/screens/widgets/user_rank.dart';
 
+class UserModel {
+  String firstName;
+  String lastName;
+  String email;
+  String phone;
+  String country;
+  String state;
+  String city;
+  String birthday;
+  String password;
+  int donationGiven = 0;
+  int donationReceived = 0;
+  UserRank rank = UserRank.None; 
+   
   UserModel({
     required this.firstName,
     required this.lastName,
@@ -21,5 +24,23 @@ class UserModel {
     required this.city,
     required this.birthday,
     required this.password,
+    this.donationGiven = 0,
+    this.donationReceived = 0,
   });
+
+  // int get donationGiven => _donationGiven;
+  // int get donationReceived => _donationReceived;
+
+  // // Setter
+  // set donationGiven(int value) {
+  //   if (value >= 0) { // Simple validation example
+  //     _donationGiven = value;
+  //   }
+  // }
+
+  // set donationReceived(int value) {
+  //   if (value >= 0) { // Simple validation example
+  //     _donationReceived = value;
+  //   }
+  // }
 }

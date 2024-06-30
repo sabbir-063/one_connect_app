@@ -14,7 +14,7 @@ class NavigationController extends GetxController {
     const HomeScreen(),
     const DonationPageScreen(),
     MessagesScreen(),
-    const DonatorListScreen(),
+    DonatorListScreen(),
     ProfileScreen(),
   ];
 }

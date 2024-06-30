@@ -6,14 +6,17 @@ import 'package:one_connect_app/features/AdminHomePage/screens/admin_home.dart';
 import 'package:one_connect_app/features/AdminProfile/screens/admin_profile.dart';
 import 'package:one_connect_app/features/AdminUserList/screens/admin_userlist.dart';
 
+import 'features/AdminPostPage/screens/admin_post.dart';
+
 class AdminNavigationController extends GetxController {
   final Rx<int> selectedIndx = 0.obs;
 
   final screens = [
+    const AdminPostScreen(),
     AdminHomeScreen(),
     const AdminChatScreen(),
-    const AdminUserlistScreen(),
-    const AdminProfileScreen(),
+    AdminUserlistScreen(),
+    AdminProfileScreen(),
   ];
 }
 
@@ -40,11 +43,15 @@ class AdminNavigationBarMenu extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.home),
-                label: "Admin Home",
+                label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Iconsax.presention_chart),
+                label: "Posts",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.message),
-                label: "Admin Chats",
+                label: "Chats",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.folder4),
@@ -52,7 +59,7 @@ class AdminNavigationBarMenu extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Iconsax.user),
-                label: "Admin Profile",
+                label: "Profile",
               ),
             ],
           ),

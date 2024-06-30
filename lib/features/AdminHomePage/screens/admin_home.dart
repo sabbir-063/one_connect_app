@@ -9,10 +9,12 @@ class AdminHomeScreen extends StatelessWidget {
 
   final PostController postController = Get.put(PostController());
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('    Posts List for Approvement'),
+        title: const Text('Posts List for Approvement'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

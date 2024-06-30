@@ -15,10 +15,15 @@ class NavigationController extends GetxController {
     const HomeScreen(),
     const DonationPageScreen(),
     MessagesScreen(),
-    const DonatorListScreen(),
+    DonatorListScreen(),
     // const NotificationScreen(),
     ProfileScreen(),
   ];
+
+  // void goToProfile() {
+  //   selectedIndx.value = 4; // Set the index to 4 (Profile)
+  //   // Get.to(() => ProfileScreen()); // Navigate to the ProfileScreen
+  // }
 }
 
 class NavigationBarMenu extends StatelessWidget {

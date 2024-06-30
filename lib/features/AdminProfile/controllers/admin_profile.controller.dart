@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/features/HomePage/screens/HomeScreen/home.dart';
 
-class AdminProfileController extends GetxController {
-  static AdminProfileController get instance => Get.find();
+import '../../authentication/screens/login/login.dart';
 
-  void nextPage() {
-    Get.offAll(const HomeScreen());
+class AdminController extends GetxController {
+  final String firstName = 'Shohan';
+  final String lastName = 'Shovo';
+  final String phone = '01860552999';
+  final String email = 'waterhorse.08@gmail.com';
+
+  void logout() {
+    // Implement logout logic here, such as clearing session or navigating to login screen
+    Get.offAll(() => const LoginScreen());
   }
 }
