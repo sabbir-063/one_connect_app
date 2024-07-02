@@ -39,7 +39,7 @@ class PostConfirmationPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const NavigationBarMenu());
+                  Get.offAll(() => const NavigationBarMenu());
                 },
                 child: const Text('Go back to homepage'),
               ),

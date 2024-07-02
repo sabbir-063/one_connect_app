@@ -19,8 +19,8 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
     'assets/images/donation/donate_2.jfif',
     'assets/images/donation/donate_3.png',
   ];
-  final TextEditingController _amountController = TextEditingController();
-  String? _selectedMethod;
+  final TextEditingController amountController = TextEditingController();
+  String _selectedMethod = 'Bkash';
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   TextFormField(
-                    controller: _amountController,
+                    controller: amountController,
                     decoration: const InputDecoration(
                       labelText: 'Amount (Taka)',
                       border: OutlineInputBorder(),
@@ -138,7 +138,7 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                     value: _selectedMethod,
                     onChanged: (value) {
                       setState(() {
-                        _selectedMethod = value;
+                        _selectedMethod = value!;
                       });
                     },
                     decoration: const InputDecoration(
@@ -163,11 +163,11 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
             // Donate Button
             ElevatedButton(
               onPressed: () {
-                if (_amountController.text.isNotEmpty &&
-                    _selectedMethod != null) {
+                if (amountController.text.isNotEmpty) {
                   Get.to(
-                    () => const DonationConfirmationPage(
-                        amount: '500', method: "hello"),
+                    () => DonationConfirmationPage(
+                        amount: amountController.toString(),
+                        method: _selectedMethod),
                   );
                 } else {
                   // Optionally show an error message or handle validation

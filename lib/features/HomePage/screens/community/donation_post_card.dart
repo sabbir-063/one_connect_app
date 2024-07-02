@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../models/CreatePostModel/post_card_model.dart';
+import 'donate_now_button.dart';
 
 class DonationPostCard extends StatelessWidget {
   final PostCardModel post;
@@ -62,7 +64,12 @@ class DonationPostCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                      Get.to(() => const DonateNowButtonScreen(), arguments: {
+                      'donationNeeded': post.donationNeeded,
+                      'donationRaised': post.donationRaised,
+                    });
+                  },
                   icon:
                       const Icon(Icons.volunteer_activism, color: Colors.blue),
                   label: const Text('Donate',

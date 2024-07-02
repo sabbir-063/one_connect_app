@@ -67,7 +67,7 @@ class AdminLoginForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Get.to(const AdminNavigationBarMenu()),
+                onPressed: () => Get.to(() => const AdminNavigationBarMenu()),
                 child: const Text(OneTexts.signIn),
               ),
             ),

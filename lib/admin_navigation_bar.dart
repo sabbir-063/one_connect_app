@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:one_connect_app/features/AdminChat/screens/admin_chat.dart';
+import 'package:one_connect_app/features/AdminChat/screens/admin_chat_list.dart';
 import 'package:one_connect_app/features/AdminHomePage/screens/admin_home.dart';
 import 'package:one_connect_app/features/AdminProfile/screens/admin_profile.dart';
 import 'package:one_connect_app/features/AdminUserList/screens/admin_userlist.dart';
@@ -14,7 +14,7 @@ class AdminNavigationController extends GetxController {
   final screens = [
     const AdminPostScreen(),
     AdminHomeScreen(),
-    const AdminChatScreen(),
+    AdminChatListScreen(),
     AdminUserlistScreen(),
     AdminProfileScreen(),
   ];

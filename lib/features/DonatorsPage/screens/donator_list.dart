@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../models/UserModel/user_model.dart';
 import '../controllers/donator_list.controller.dart';
-import 'widgets/user_rank.dart';
 
 class DonatorListScreen extends StatelessWidget {
   final DonatorListController userController = Get.put(DonatorListController());

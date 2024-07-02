@@ -68,7 +68,7 @@ class OneForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Get.to(const NavigationBarMenu()),
+                onPressed: () => Get.to(() => const NavigationBarMenu()),
                 // onPressed: () => Get.to(const CurvedNavigationBar()),
                 child: const Text(OneTexts.signIn),
               ),

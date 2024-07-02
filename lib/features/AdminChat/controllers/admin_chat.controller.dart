@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/features/HomePage/screens/HomeScreen/home.dart';
+
+import '../../../models/MessageModel/message_model.dart';
 
 class AdminChatController extends GetxController {
-  static AdminChatController get instance => Get.find();
+  var messages = <MessageModel>[].obs;
+  TextEditingController messageController = TextEditingController();
 
-  void nextPage() {
-    Get.offAll(const HomeScreen());
+  void sendMessage(String sender, String receiver) {
+    if (messageController.text.isNotEmpty) {
+      messages.insert(
+        0,
+        MessageModel(
+          sender: sender,
+          receiver: receiver,
+          content: messageController.text,
+          timestamp: DateTime.now(),
+        ),
+      );
+      messageController.clear();
+    }
   }
 }

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:one_connect_app/features/HomePage/screens/HomeScreen/home.dart';
 
 class DonationController extends GetxController {
-  static DonationController get instance => Get.find();
 
   void nextPage() {
     Get.offAll(const HomeScreen());

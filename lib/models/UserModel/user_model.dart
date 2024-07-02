@@ -1,4 +1,3 @@
-import '../../features/AdminUserList/screens/widgets/user_rank.dart';
 
 class UserModel {
   String firstName;
@@ -28,19 +27,6 @@ class UserModel {
     this.donationReceived = 0,
   });
 
-  // int get donationGiven => _donationGiven;
-  // int get donationReceived => _donationReceived;
 
-  // // Setter
-  // set donationGiven(int value) {
-  //   if (value >= 0) { // Simple validation example
-  //     _donationGiven = value;
-  //   }
-  // }
-
-  // set donationReceived(int value) {
-  //   if (value >= 0) { // Simple validation example
-  //     _donationReceived = value;
-  //   }
-  // }
 }
+enum UserRank { None, Gold, Silver, Bronze }

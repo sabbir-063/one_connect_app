@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/ProfilePage/controllers/logged_user.dart';
+import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_History.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 import 'package:one_connect_app/features/notification/screens/notification.dart';
 import 'package:one_connect_app/models/UserModel/user_model.dart';
@@ -16,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
   final UserModel initialUser = UserModel(
     firstName: 'Mohammad',
     lastName: 'Sabbir',
-    email: 'sabbir.musfique01@gmail.com',
+    email: 'Sabbir@example.com',
     phone: '01884952804',
     country: 'Bangladesh',
     state: 'Lakshmipur',
@@ -128,20 +129,22 @@ class ProfileScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // Navigate to Donation History
+                            Get.to(() => DonationHistoryPage(
+                                email: userController.loggedUser.value.email));
                           },
                           child: const Text('Donation History'),
                         ),
                       ),
-                      const SizedBox(
-                          width: 10), // Small space between the buttons
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Received Organization
-                          },
-                          child: const Text('Received Organization'),
-                        ),
-                      ),
+                      // const SizedBox(
+                      //     width: 10), // Small space between the buttons
+                      // Expanded(
+                      //   child: ElevatedButton(
+                      //     onPressed: () {
+                      //       // Navigate to Received Organization
+                      //     },
+                      //     child: const Text('Received Organization'),
+                      //   ),
+                      // ),
                     ],
                   ),
 
@@ -192,6 +195,8 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+
+    
   }
 
   void onSelected(BuildContext context, int item, LoggedUser userController) {
@@ -210,4 +215,6 @@ class ProfileScreen extends StatelessWidget {
         break;
     }
   }
+
+
 }

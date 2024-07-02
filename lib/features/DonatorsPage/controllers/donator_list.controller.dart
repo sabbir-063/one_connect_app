@@ -4,8 +4,6 @@ import 'package:one_connect_app/features/HomePage/screens/HomeScreen/home.dart';
 
 import '../../../data/static_data/user_list/user_data2.dart';
 import '../../../models/UserModel/user_model.dart';
-import '../screens/widgets/user_rank.dart';
-
 
 class DonatorListController extends GetxController {
   final _users = <UserModel>[].obs;

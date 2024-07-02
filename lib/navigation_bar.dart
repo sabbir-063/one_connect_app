@@ -13,7 +13,7 @@ class NavigationController extends GetxController {
 
   final screens = [
     const HomeScreen(),
-    const DonationPageScreen(),
+    DonationPageScreen(),
     MessagesScreen(),
     DonatorListScreen(),
     // const NotificationScreen(),

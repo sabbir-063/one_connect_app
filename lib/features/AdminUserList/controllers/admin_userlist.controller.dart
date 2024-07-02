@@ -1,171 +1,83 @@
-// admin_userlist.controller.dart
-
 import 'package:get/get.dart';
 import '../../../data/static_data/user_list/user_data2.dart';
 import '../../../models/UserModel/user_model.dart';
-import '../screens/widgets/user_rank.dart';
 
-class AdminUserListController extends GetxController {
-  final _users = <UserModel>[].obs;
-  final _filteredUsers = <UserModel>[].obs;
-  final _searchQuery = ''.obs;
-  String _sortBy = 'donationGiven'; // Default sort by donationGiven
-  bool _sortAscending = false; // Default sort descending
+class AdminUserController extends GetxController {
+  var users = <UserModel>[].obs;
+  var filteredUsers = <UserModel>[].obs;
+  var currentPage = 1.obs;
+  var usersPerPage = 10;
+  var searchText = ''.obs;
 
   @override
   void onInit() {
-    _users.assignAll(UserData2.users); // Initialize with all users
-    _filteredUsers.assignAll(_users); // Initially show all users
     super.onInit();
+    fetchUsers();
   }
 
-  List<UserModel> get users => _filteredUsers.toList();
-  String get sortBy => _sortBy;
-  bool get sortAscending => _sortAscending;
+  void fetchUsers() {
+    users.value = UserData2.users;
+    users.sort((a, b) => b.donationGiven.compareTo(a.donationGiven));
+    assignRanks();
+    applySearchAndPagination();
+  }
+
+  void assignRanks() {
+    for (int i = 0; i < users.length; i++) {
+      if (i == 0) {
+        users[i].rank = UserRank.Gold;
+      } else if (i == 1 || i == 2) {
+        users[i].rank = UserRank.Silver;
+      } else if (i < 10) {
+        users[i].rank = UserRank.Bronze;
+      } else {
+        users[i].rank = UserRank.None;
+      }
+    }
+  }
+
+  void applySearchAndPagination() {
+    List<UserModel> allUsers = users;
+
+    if (searchText.isNotEmpty) {
+      allUsers = allUsers.where((user) {
+        return user.firstName
+                .toLowerCase()
+                .contains(searchText.value.toLowerCase()) ||
+            user.lastName
+                .toLowerCase()
+                .contains(searchText.value.toLowerCase()) ||
+            user.email.toLowerCase().contains(searchText.value.toLowerCase()) ||
+            user.country
+                .toLowerCase()
+                .contains(searchText.value.toLowerCase()) ||
+            user.city.toLowerCase().contains(searchText.value.toLowerCase());
+      }).toList();
+    }
+
+    filteredUsers.value = allUsers
+        .skip((currentPage.value - 1) * usersPerPage)
+        .take(usersPerPage)
+        .toList();
+  }
 
   void search(String query) {
-    _searchQuery.value = query.toLowerCase();
-    _applyFilter();
+    searchText.value = query;
+    currentPage.value = 1;
+    applySearchAndPagination();
   }
 
-  void setSortBy(String sortBy) {
-    _sortBy = sortBy;
-    _applyFilter();
+  void nextPage() {
+    if (currentPage.value * usersPerPage < users.length) {
+      currentPage.value++;
+      applySearchAndPagination();
+    }
   }
 
-  void setSortAscending(bool ascending) {
-    _sortAscending = ascending;
-    _applyFilter();
-  }
-
-  void _applyFilter() {
-    _filteredUsers.assignAll(_users.where((user) =>
-        user.firstName.toLowerCase().contains(_searchQuery.value) ||
-        user.lastName.toLowerCase().contains(_searchQuery.value) ||
-        user.email.toLowerCase().contains(_searchQuery.value) ||
-        user.phone.toLowerCase().contains(_searchQuery.value)));
-
-    // Sort filtered users
-    _filteredUsers.sort((a, b) {
-      dynamic aValue, bValue;
-      switch (_sortBy) {
-        case 'name':
-          aValue = '${a.firstName} ${a.lastName}';
-          bValue = '${b.firstName} ${b.lastName}';
-          break;
-        case 'email':
-          aValue = a.email;
-          bValue = b.email;
-          break;
-        case 'phone':
-          aValue = a.phone;
-          bValue = b.phone;
-          break;
-        case 'donationGiven':
-          aValue = a.donationGiven;
-          bValue = b.donationGiven;
-          break;
-        case 'donationReceived':
-          aValue = a.donationReceived;
-          bValue = b.donationReceived;
-          break;
-        default:
-          return 0;
-      }
-      if (_sortAscending) {
-        return Comparable.compare(aValue, bValue);
-      } else {
-        return Comparable.compare(bValue, aValue);
-      }
-    });
-  }
-
-  UserRank getUserRank(int index) {
-    if (index < 3) {
-      return UserRank.Gold;
-    } else if (index < 10) {
-      return UserRank.Silver;
-    } else if (index < 20) {
-      return UserRank.Bronze;
-    } else {
-      return UserRank.None;
+  void previousPage() {
+    if (currentPage.value > 1) {
+      currentPage.value--;
+      applySearchAndPagination();
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // user_controller.dart
-
-// import 'package:get/get.dart';
-// import '../../../data/static_data/user_list/user_data2.dart';
-// import '../../../models/UserModel/user_model.dart';
-// import '../screens/widgets/user_rank.dart';
-
-// class AdminUserListController extends GetxController {
-//   final _users = <UserModel>[].obs;
-//   final _filteredUsers = <UserModel>[].obs;
-//   final _searchQuery = ''.obs;
-
-//   @override
-//   void onInit() {
-//     _users.assignAll(UserData2.users); // Initialize with all users
-//     _filteredUsers.assignAll(_users); // Initially show all users
-//     super.onInit();
-//   }
-
-//   List<UserModel> get users => _filteredUsers.toList();
-
-//   void search(String query) {
-//     _searchQuery.value = query.toLowerCase();
-//     _applyFilter();
-//   }
-
-
-//   void _applyFilter() {
-//     if (_searchQuery.isEmpty) {
-//       _filteredUsers.assignAll(_users);
-//     } else {
-//       _filteredUsers.assignAll(_users.where((user) =>
-//           user.firstName.toLowerCase().contains(_searchQuery.value) ||
-//           user.lastName.toLowerCase().contains(_searchQuery.value) ||
-//           user.email.toLowerCase().contains(_searchQuery.value) ||
-//           user.phone.toLowerCase().contains(_searchQuery.value)));
-//     }
-//     _filteredUsers.sort((a, b) =>
-//         b.donationGiven.compareTo(a.donationGiven)); // Sort by donationGiven
-//   }
-
-//   UserRank getUserRank(int index) {
-//     if (index < 3) {
-//       return UserRank.Gold;
-//     } else if (index < 10) {
-//       return UserRank.Silver;
-//     } else if (index < 20) {
-//       return UserRank.Bronze;
-//     } else {
-//       return UserRank.Bronze;
-//     }
-//   }
-// }
