@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
 
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const AdminLoginScreen());
+                  Get.offAll(() => const AdminLoginScreen());
                 },
                 child: const Text(
                   "Login as Admin",

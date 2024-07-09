@@ -72,21 +72,22 @@ class DonationOnboardingPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 16),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 15),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
                         child: Image.asset(
                           feature['image']!,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          height: 200,
+                          height: 250,
                         ),
                       ),
-                      const Divider(),
+                      const Divider(height: 5),
+                      const SizedBox(height: 50),
                     ],
                   ),
                 )),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -97,7 +98,7 @@ class DonationOnboardingPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   ...quotes.map((quote) => Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
@@ -135,6 +136,7 @@ class Footer extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
+          SizedBox(height: 20),
           Text(
             'Join us in making a difference!',
             textAlign: TextAlign.center,
