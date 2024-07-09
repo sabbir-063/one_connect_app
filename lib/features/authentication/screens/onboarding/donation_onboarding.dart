@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 
 class DonationOnboardingPage extends StatelessWidget {
-  final List<String> imageList = [
-    'assets/images/slider1.png', // Replace with your own images
-    'assets/images/slider2.jpg',
-    'assets/images/slider3.jpg',
-    'assets/images/slider4.jpg',
-  ];
-
   final List<Map<String, String>> featureList = [
     {
       'title': 'Seek Donation',
       'description':
-          'Users can post requests for donations and receive support from the community.'
+          'Users can post requests for donations and receive support from the community.',
+      'image':
+          'assets/images/onboarding/img1.png' // Replace with your own image path
     },
     {
       'title': 'Central Fund',
       'description':
-          'Users can contribute to our central fund to help those in need.'
+          'Users can contribute to our central fund to help those in need.',
+      'image':
+          'assets/images/onboarding/img2.png' // Replace with your own image path
     },
     {
       'title': 'Help the Poor',
       'description':
-          'We donate to poor people from our central fund to provide them with essential support.'
+          'We donate to poor people from our central fund to provide them with essential support.',
+      'image':
+          'assets/images/onboarding/img3.jfif' // Replace with your own image path
     },
     {
       'title': 'Top Donators',
       'description':
-          'Users can view the list of top donators and get inspired by their generosity.'
+          'Users can view the list of top donators and get inspired by their generosity.',
+      'image':
+          'assets/images/onboarding/img4.png' // Replace with your own image path
     },
   ];
 
@@ -53,42 +53,34 @@ class DonationOnboardingPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 200.0,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 16 / 9,
-                autoPlayInterval: const Duration(seconds: 3),
-              ),
-              items: imageList.map((imagePath) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.width,
-                    );
-                  },
-                );
-              }).toList(),
-            ),
             const SizedBox(height: 20),
             ...featureList.map((feature) => Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         feature['title']!,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         feature['description']!,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: Image.asset(
+                          feature['image']!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 200,
+                        ),
                       ),
                       const Divider(),
                     ],
@@ -98,10 +90,11 @@ class DonationOnboardingPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'Famous Quotes on Giving',
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -109,6 +102,7 @@ class DonationOnboardingPage extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
                           quote,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 16, fontStyle: FontStyle.italic),
                         ),
@@ -143,6 +137,7 @@ class Footer extends StatelessWidget {
         children: [
           Text(
             'Join us in making a difference!',
+            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
