@@ -1,21 +1,45 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/models/UserModel/user_model.dart';
-import 'package:one_connect_app/navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../navigation_bar.dart';
 
 class LoggedUser extends GetxController {
   // Reactive user model
-  Rx<UserModel> loggedUser;
+  Rx<UserModel> loggedUser = UserModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    country: '',
+    state: '',
+    city: '',
+    birthday: '',
+    password: '',
+  ).obs;
 
-  // New Password field (optional)
-  // String newPassword = '';
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Form key for validation
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  // Method to fetch user data from Firestore
+  Future<void> fetchUserData(String userId) async {
+    try {
+      // Fetch user document from Firestore
+      DocumentSnapshot<Map<String, dynamic>> userDoc =
+          await _firestore.collection('Users').doc(userId).get();
 
-  // Constructor to initialize with a UserModel instance
-  LoggedUser(UserModel user)
-      : loggedUser = user.obs; // Initialize the reactive user
+      // Convert Firestore data to UserModel
+      if (userDoc.exists) {
+        loggedUser.value = UserModel.fromMap(userDoc.data()!);
+      } else {
+        // Handle if user document does not exist
+        Get.snackbar('Error', 'User data not found.');
+      }
+    } catch (e) {
+      // Handle any errors
+      Get.snackbar('Error', 'Failed to fetch user data: $e');
+    }
+  }
 
   // Method to update the user profile
   void updateProfile({

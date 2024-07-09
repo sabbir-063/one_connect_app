@@ -12,7 +12,7 @@ class DonationConfirmationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NavigationController navController = Get.find<NavigationController>();
+    Get.find<NavigationController>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

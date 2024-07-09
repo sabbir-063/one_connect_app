@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154462080487",
+    "project_id": "one-connect-app-66a93",
+    "storage_bucket": "one-connect-app-66a93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154462080487:android:e5e1a893191102b3b94142",
+        "android_client_info": {
+          "package_name": "com.example.one_connect_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNCIIt9m-DdHcjY4sd-qgDz_-9TOM0C-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

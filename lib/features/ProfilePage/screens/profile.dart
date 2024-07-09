@@ -4,35 +4,24 @@ import 'package:one_connect_app/features/ProfilePage/controllers/logged_user.dar
 import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_History.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 import 'package:one_connect_app/features/notification/screens/notification.dart';
-import 'package:one_connect_app/models/UserModel/user_model.dart';
 import 'package:one_connect_app/features/HomePage/screens/community/donation_post_card.dart';
 import 'package:one_connect_app/data/static_data/post_data/post_card_data.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/edit_profile.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/user_detailsitems.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
-
-  // Create an initial user model instance
-  final UserModel initialUser = UserModel(
-    firstName: 'Mohammad',
-    lastName: 'Sabbir',
-    email: 'Sabbir@example.com',
-    phone: '01884952804',
-    country: 'Bangladesh',
-    state: 'Lakshmipur',
-    city: 'Ramganj',
-    birthday: '2002-06-25',
-    password: '1234',
-    donationGiven: 2500,
-    donationReceived: 5000,
-  );
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the LoggedUser controller with the initial user model
-    final LoggedUser userController =
-        Get.put(LoggedUser(initialUser), permanent: true);
+    // Initialize the LoggedUser controller
+    final LoggedUser userController = Get.put(LoggedUser());
+
+    // Fetch user data when screen initializes
+    Future.microtask(() async {
+      await userController
+          .fetchUserData('userId'); // Replace 'userId' with actual user ID
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -60,38 +49,42 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Profile Picture
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage(
-                        'assets/images/profile/sabbir_profile_pic.jpg'), // Placeholder or actual image URL
-                  ),
-                  const SizedBox(height: 10),
+      body: Obx(() {
+        if (userController.loggedUser.value.firstName.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Profile Picture (Add your logic for profile picture)
+                      const CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage(
+                            'assets/images/profile/sabbir_profile_pic.jpg'), // Placeholder or actual image URL
+                      ),
+                      const SizedBox(height: 10),
 
-                  // User Name and Phone
-                  Obx(() => Text(
+                      // User Name and Phone
+                      Text(
                         '${userController.loggedUser.value.firstName} ${userController.loggedUser.value.lastName}',
                         style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
-                      )),
-                  const SizedBox(height: 5),
-                  Obx(() => Text(
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
                         userController.loggedUser.value.phone,
                         style:
                             const TextStyle(fontSize: 20, color: Colors.grey),
-                      )),
-                  const SizedBox(height: 20),
+                      ),
+                      const SizedBox(height: 20),
 
-                  // Donation Stats
-                  Obx(() => Row(
+                      // Donation Stats
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Column(
@@ -119,41 +112,32 @@ class ProfileScreen extends StatelessWidget {
                             ],
                           ),
                         ],
-                      )),
-                  const SizedBox(height: 20),
-
-                  // Buttons for Donation History and Received Organization
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Donation History
-                            Get.to(() => DonationHistoryPage(
-                                email: userController.loggedUser.value.email));
-                          },
-                          child: const Text('Donation History'),
-                        ),
                       ),
-                      // const SizedBox(
-                      //     width: 10), // Small space between the buttons
-                      // Expanded(
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       // Navigate to Received Organization
-                      //     },
-                      //     child: const Text('Received Organization'),
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                      const SizedBox(height: 20),
 
-                  const SizedBox(height: 20),
-                  const Divider(),
-                  const SizedBox(height: 10),
+                      // Buttons for Donation History and Received Organization
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Navigate to Donation History
+                                Get.to(() => DonationHistoryPage(
+                                    email:
+                                        userController.loggedUser.value.email));
+                              },
+                              child: const Text('Donation History'),
+                            ),
+                          ),
+                        ],
+                      ),
 
-                  // Additional User Details
-                  Obx(() => Column(
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      const SizedBox(height: 10),
+
+                      // Additional User Details
+                      Column(
                         children: [
                           UserDetailsItem(
                             icon: Icons.email,
@@ -169,37 +153,40 @@ class ProfileScreen extends StatelessWidget {
                                 '${userController.loggedUser.value.city}, ${userController.loggedUser.value.state}, ${userController.loggedUser.value.country}',
                           ),
                         ],
-                      )),
-                  const Divider(),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "My posts",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "My posts",
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          // List of Posts
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final post = PostCardData.postCardData[index];
-                return post.profileName == 'Mohammad Sabbir'
-                    ? DonationPostCard(post: post)
-                    : const SizedBox.shrink();
-              },
-              childCount: PostCardData.postCardData.length,
-            ),
-          ),
-        ],
-      ),
+              // List of Posts (Modify as per your logic)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final post = PostCardData.postCardData[index];
+                    return post.profileName ==
+                            '${userController.loggedUser.value.firstName} ${userController.loggedUser.value.lastName}'
+                        ? DonationPostCard(post: post)
+                        : const SizedBox.shrink();
+                  },
+                  childCount: PostCardData.postCardData.length,
+                ),
+              ),
+            ],
+          );
+        }
+      }),
     );
-
-    
   }
 
-  void onSelected(BuildContext context, int item, LoggedUser userController) {
+  void onSelected(
+      BuildContext context, int item, LoggedUser userController) async {
     switch (item) {
       case 0:
         // Navigate to Edit Profile
@@ -215,6 +202,4 @@ class ProfileScreen extends StatelessWidget {
         break;
     }
   }
-
-
 }

@@ -1,6 +1,5 @@
 // notification_data.dart
 
-import 'package:flutter/material.dart';
 
 import '../../../models/AdminNotificationModel/admin_notification_model.dart';
 

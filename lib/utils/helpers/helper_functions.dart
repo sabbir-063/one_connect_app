@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 class OneHelperFunctions {
@@ -33,6 +31,38 @@ class OneHelperFunctions {
       SnackBar(
         content: Text(message),
       ),
+    );
+  }
+
+  void showCustomSnackBar(String title, String message, bool isSuccess) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: isSuccess ? Colors.green : Colors.red,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+      snackStyle: SnackStyle.FLOATING,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 8,
+      barBlur: 0,
+      animationDuration: const Duration(milliseconds: 300),
+      forwardAnimationCurve: Curves.easeOut,
+      reverseAnimationCurve: Curves.easeIn,
+      mainButton: TextButton(
+        onPressed: () {
+          Get.back(); // Close the snackbar
+        },
+        child: const Text(
+          'Dismiss',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      isDismissible: true,
+      showProgressIndicator: true,
+      progressIndicatorValueColor:
+          const AlwaysStoppedAnimation<Color>(Colors.white),
+      progressIndicatorBackgroundColor: Colors.grey,
     );
   }
 
@@ -98,16 +128,11 @@ class OneHelperFunctions {
     final wrappedList = <Widget>[];
 
     for (var i = 0; i < widgets.length; i += rowSize) {
-      final rowChildren = widgets.sublist(i, i + rowSize > widgets.length ? widgets.length : i + rowSize);
+      final rowChildren = widgets.sublist(
+          i, i + rowSize > widgets.length ? widgets.length : i + rowSize);
       wrappedList.add(Row(children: rowChildren));
     }
 
     return wrappedList;
   }
-
-
-
-
-
-  
 }

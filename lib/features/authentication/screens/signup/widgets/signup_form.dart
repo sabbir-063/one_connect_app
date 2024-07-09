@@ -2,19 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:csc_picker/csc_picker.dart';
-
-import '../../../../../utils/constants/colors.dart';
+import '../../../controllers/signup/signup.controller.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
-import '../../../../../utils/helpers/helper_functions.dart';
-import '../../../controllers/signup/signup.controller.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final dark = OneHelperFunctions.isDarkMode(context);
     final controller = Get.put(SignUpController());
 
     return Form(
@@ -23,7 +19,7 @@ class SignUpForm extends StatelessWidget {
         children: [
           Row(
             children: [
-              //first name
+              // First Name
               Expanded(
                 child: TextFormField(
                   controller: controller.firstNameController,
@@ -41,7 +37,7 @@ class SignUpForm extends StatelessWidget {
               ),
               const SizedBox(width: OneSizes.spaceBtwInputField),
 
-              //last name
+              // Last Name
               Expanded(
                 child: TextFormField(
                   controller: controller.lastNameController,
@@ -62,7 +58,7 @@ class SignUpForm extends StatelessWidget {
 
           const SizedBox(height: OneSizes.spaceBtwInputField),
 
-          //email
+          // Email
           TextFormField(
             controller: controller.emailController,
             decoration: const InputDecoration(
@@ -82,7 +78,7 @@ class SignUpForm extends StatelessWidget {
 
           const SizedBox(height: OneSizes.spaceBtwInputField),
 
-          //phone number
+          // Phone Number
           TextFormField(
             controller: controller.phoneController,
             decoration: const InputDecoration(
@@ -103,11 +99,11 @@ class SignUpForm extends StatelessWidget {
 
           const SizedBox(height: OneSizes.spaceBtwInputField),
 
-          //country state city
+          // Country, State, City
           CSCPicker(
             flagState: CountryFlag.DISABLE,
             onCountryChanged: (value) {
-              controller.country = value ?? '';
+              controller.country = value;
             },
             onStateChanged: (value) {
               controller.state = value ?? '';
@@ -115,13 +111,15 @@ class SignUpForm extends StatelessWidget {
             onCityChanged: (value) {
               controller.city = value ?? '';
             },
-            selectedItemStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            selectedItemStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           const SizedBox(height: OneSizes.spaceBtwInputField),
 
-          //birthday
+          // Birthday
           TextFormField(
             controller: controller.birthdayController,
             decoration: const InputDecoration(
@@ -152,34 +150,41 @@ class SignUpForm extends StatelessWidget {
 
           const SizedBox(height: OneSizes.spaceBtwInputField),
 
-          //password
-          TextFormField(
-            controller: controller.passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: OneTexts.password,
-              prefixIcon: Icon(Iconsax.arrow_right),
-              suffixIcon: Icon(Iconsax.eye_slash),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your password';
-              }
-              if (value.length < 8) {
-                return 'Password must be at least 8 characters long';
-              }
-              if (!RegExp(
-                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?~\-\[\]\\;/=.,])')
-                  .hasMatch(value)) {
-                return 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character';
-              }
-              return null;
-            },
-          ),
+          // Password
+          Obx(() => TextFormField(
+                controller: controller.passwordController,
+                obscureText: controller.isPasswordHidden.value,
+                decoration: InputDecoration(
+                  labelText: OneTexts.password,
+                  prefixIcon: const Icon(Iconsax.arrow_right),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.isPasswordHidden.value
+                          ? Iconsax.eye_slash
+                          : Iconsax.eye,
+                    ),
+                    onPressed: controller.togglePasswordVisibility,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  if (value.length < 8) {
+                    return 'Password must be at least 8 characters long';
+                  }
+                  if (!RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?~\-\[\]\\;/=.,])')
+                      .hasMatch(value)) {
+                    return 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character';
+                  }
+                  return null;
+                },
+              )),
 
           const SizedBox(height: OneSizes.spaceBtwSections),
 
-          ///Sign Up
+          // Sign Up
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

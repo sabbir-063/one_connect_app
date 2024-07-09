@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../models/UserModel/user_model.dart';
-import '../../../../navigation_bar.dart';
-import '../../screens/signup/widgets/email_verification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:one_connect_app/features/authentication/screens/login/login.dart';
+import '../../../../../models/UserModel/user_model.dart';
 
 class SignUpController extends GetxController {
   final formKey = GlobalKey<FormState>();
-
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -18,76 +17,115 @@ class SignUpController extends GetxController {
   String country = '';
   String state = '';
   String city = '';
-  bool agreeToTerms = true;
+  var isPasswordHidden = true.obs;
 
-  void setAgreeToTerms(bool value) {
-    agreeToTerms = value;
-    update();
+  void togglePasswordVisibility() {
+    isPasswordHidden.value = !isPasswordHidden.value;
   }
 
-  void validateLocation() {
-    if (country.isEmpty || state.isEmpty || city.isEmpty) {
-      Get.snackbar('Error', 'Please select your country, state, and city.');
-    }
-  }
-
-  void validateTermsAgreement() {
-    if (!agreeToTerms) {
-      Get.snackbar('Error', 'You must agree to the terms and conditions.');
-    }
-  }
-
-  void validateForm() {
+  Future<void> validateForm() async {
     if (formKey.currentState!.validate()) {
-      signUp();
-    } else {
-      validateLocation();
-      validateTermsAgreement();
+      try {
+        if (await _isEmailOrPhoneNumberUsed()) {
+          showCustomSnackBar(
+              'Error', 'Email or phone number already in use.', false);
+          return;
+        }
+
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        UserModel newUser = UserModel(
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          email: emailController.text,
+          phone: phoneController.text,
+          country: country,
+          state: state,
+          city: city,
+          birthday: birthdayController.text,
+          password: passwordController.text,
+        );
+
+        await saveUserToFirestore(userCredential.user!.uid, newUser);
+
+        Get.offAll(() => const LoginScreen());
+        showCustomSnackBar('Success', 'User registered successfully', true);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          showCustomSnackBar(
+              'Error', 'The password provided is too weak.', false);
+        } else if (e.code == 'email-already-in-use') {
+          showCustomSnackBar(
+              'Error', 'The account already exists for that email.', false);
+        } else {
+          showCustomSnackBar('Error',
+              e.message ?? 'Firebase Auth Exception error occurred', false);
+        }
+      } catch (e) {
+        showCustomSnackBar(
+            'Error', 'An error occurred. Please try again.', false);
+      }
     }
   }
 
-  void signUp() {
-    final isValidPassword = _validatePassword(passwordController.text);
+  Future<bool> _isEmailOrPhoneNumberUsed() async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: emailController.text)
+        .get();
 
-    if (isValidPassword &&
-        country.isNotEmpty &&
-        state.isNotEmpty &&
-        city.isNotEmpty &&
-        agreeToTerms) {
-      final user = UserModel(
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        email: emailController.text,
-        phone: phoneController.text,
-        country: country,
-        state: state,
-        city: city,
-        birthday: birthdayController.text,
-        password: passwordController.text,
-      );
+    final QuerySnapshot phoneResult = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('phone', isEqualTo: phoneController.text)
+        .get();
 
-      // Save user data and navigate to email verification page
-      // Assuming user data is saved successfully
-      Get.to(() => EmailVerificationPage());
-    } else {
-      validateLocation();
-      validateTermsAgreement();
+    return result.docs.isNotEmpty || phoneResult.docs.isNotEmpty;
+  }
+
+  Future<void> saveUserToFirestore(String uid, UserModel user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .set(user.toMap());
+    } catch (e) {
+      throw Exception('Failed to save user data');
     }
   }
 
-  bool _validatePassword(String value) {
-    if (value.length < 8) {
-      Get.snackbar('Error', 'Password must be at least 8 characters long');
-      return false;
-    }
-    if (!RegExp(
-            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?~\-\[\]\\;/=.,])')
-        .hasMatch(value)) {
-      Get.snackbar('Error',
-          'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character');
-      return false;
-    }
-    return true;
+  void showCustomSnackBar(String title, String message, bool isSuccess) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: isSuccess ? Colors.green : Colors.red,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+      snackStyle: SnackStyle.FLOATING,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 8,
+      barBlur: 0,
+      animationDuration: const Duration(milliseconds: 300),
+      forwardAnimationCurve: Curves.easeOut,
+      reverseAnimationCurve: Curves.easeIn,
+      mainButton: TextButton(
+        onPressed: () {
+          Get.back(); // Close the snackbar
+        },
+        child: const Text(
+          'Dismiss',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      isDismissible: true,
+      showProgressIndicator: true,
+      progressIndicatorValueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+      progressIndicatorBackgroundColor: Colors.grey,
+    );
   }
 
   @override

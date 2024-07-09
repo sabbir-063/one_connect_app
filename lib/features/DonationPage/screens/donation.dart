@@ -13,7 +13,6 @@ class DonationPageScreen extends StatefulWidget {
 }
 
 class _DonationPageScreenState extends State<DonationPageScreen> {
-  int _currentIndex = 0;
   final List<String> imgList = [
     'assets/images/donation/donate_1.png',
     'assets/images/donation/donate_2.jfif',
@@ -57,7 +56,6 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                 viewportFraction: 0.8,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    _currentIndex = index;
                   });
                 },
               ),

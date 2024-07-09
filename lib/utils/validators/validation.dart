@@ -1,4 +1,3 @@
-import 'package:get_storage/get_storage.dart';
 
 class OneValidator {
   static String? validateEmail(String? value) {

@@ -1,6 +1,5 @@
 // notification_model.dart
 
-import 'package:flutter/material.dart';
 
 class NotificationModel {
   final int id; // Add id field

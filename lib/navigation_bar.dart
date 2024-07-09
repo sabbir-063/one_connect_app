@@ -6,7 +6,6 @@ import 'package:one_connect_app/features/DonatorsPage/screens/donator_list.dart'
 import 'package:one_connect_app/features/MessagePage/screens/messages.dart';
 import 'features/HomePage/screens/HomeScreen/home.dart';
 import 'features/ProfilePage/screens/profile.dart';
-import 'features/notification/screens/notification.dart';
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndx = 0.obs;

@@ -24,15 +24,6 @@ class AdminUserController extends GetxController {
 
   void assignRanks() {
     for (int i = 0; i < users.length; i++) {
-      if (i == 0) {
-        users[i].rank = UserRank.Gold;
-      } else if (i == 1 || i == 2) {
-        users[i].rank = UserRank.Silver;
-      } else if (i < 10) {
-        users[i].rank = UserRank.Bronze;
-      } else {
-        users[i].rank = UserRank.None;
-      }
     }
   }
 

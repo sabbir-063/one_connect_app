@@ -1,6 +1,5 @@
 // notification_data.dart
 
-import 'package:flutter/material.dart';
 import '../../../models/notificationModel/notification_model.dart';
 
 List<NotificationModel> mockNotifications = [

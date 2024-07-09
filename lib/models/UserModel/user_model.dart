@@ -1,4 +1,4 @@
-
+// UserModel class
 class UserModel {
   String firstName;
   String lastName;
@@ -9,10 +9,9 @@ class UserModel {
   String city;
   String birthday;
   String password;
-  int donationGiven = 0;
-  int donationReceived = 0;
-  UserRank rank = UserRank.None; 
-   
+  int donationGiven;
+  int donationReceived;
+
   UserModel({
     required this.firstName,
     required this.lastName,
@@ -27,6 +26,37 @@ class UserModel {
     this.donationReceived = 0,
   });
 
+  // Convert UserModel to a map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'phone': phone,
+      'country': country,
+      'state': state,
+      'city': city,
+      'birthday': birthday,
+      'password': password,
+      'donationGiven': donationGiven,
+      'donationReceived': donationReceived,
+    };
+  }
 
+  // Create a UserModel instance from a map
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      email: map['email'],
+      phone: map['phone'],
+      country: map['country'],
+      state: map['state'],
+      city: map['city'],
+      birthday: map['birthday'],
+      password: map['password'],
+      donationGiven: map['donationGiven'] ?? 0,
+      donationReceived: map['donationReceived'] ?? 0,
+    );
+  }
 }
-enum UserRank { None, Gold, Silver, Bronze }

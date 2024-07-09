@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/common/styles/spacing_styles.dart';
 import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
@@ -26,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               const LoginTitle(),
 
               /// Form
-              const OneForm(),
+              OneForm(),
 
               //Divider
               const DividerText(dividerText: OneTexts.signInWith),

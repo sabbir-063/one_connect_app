@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:one_connect_app/features/HomePage/screens/HomeScreen/home.dart';
 
 import '../../../data/static_data/user_list/user_data2.dart';
 import '../../../models/UserModel/user_model.dart';
@@ -80,15 +79,5 @@ class DonatorListController extends GetxController {
     });
   }
 
-  UserRank getUserRank(int index) {
-    if (index < 3) {
-      return UserRank.Gold;
-    } else if (index < 10) {
-      return UserRank.Silver;
-    } else if (index < 20) {
-      return UserRank.Bronze;
-    } else {
-      return UserRank.None;
-    }
-  }
+
 }

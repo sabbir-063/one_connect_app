@@ -103,7 +103,6 @@ class DonatorListScreen extends StatelessWidget {
   }
 
   Widget _buildUserListItem(UserModel user, int index) {
-    UserRank rank = userController.getUserRank(index);
     return Card(
       margin: const EdgeInsets.all(8),
       child: ListTile(
@@ -112,33 +111,10 @@ class DonatorListScreen extends StatelessWidget {
         ),
         title: Text('${user.firstName} ${user.lastName}'),
         subtitle: const Text('Donation Given: *** Tk'),
-        trailing: _buildRankIcon(rank),
+
       ),
     );
   }
 
-  Widget _buildRankIcon(UserRank rank) {
-    IconData iconData;
-    Color color;
-    switch (rank) {
-      case UserRank.Gold:
-        iconData = Icons.emoji_events;
-        color = Colors.yellow;
-        break;
-      case UserRank.Silver:
-        iconData = Icons.emoji_events;
-        color = Colors.grey;
-        break;
-      case UserRank.Bronze:
-        iconData = Icons.emoji_events;
-        color = Colors.brown;
-        break;
-      default:
-        return const SizedBox.shrink(); // No icon if rank not defined
-    }
-    return Icon(
-      iconData,
-      color: color,
-    );
-  }
+
 }
