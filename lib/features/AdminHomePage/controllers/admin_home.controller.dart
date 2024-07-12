@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../../AdminPostPage/controllers/donation_posts.controller.dart';
 
 class AdminHomeController extends GetxController {
   var posts = <AdminPostModel>[].obs;
@@ -32,6 +33,8 @@ class AdminHomeController extends GetxController {
       'postAccepted': true,
       'adminChecked': true,
     });
+    final controller = Get.find<DonationPostsController>();
+    controller.updatePostPage();
   }
 
   void rejectPost(String postId) async {

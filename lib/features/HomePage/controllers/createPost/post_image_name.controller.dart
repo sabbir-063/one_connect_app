@@ -30,4 +30,9 @@ class PostImageNameController extends GetxController {
       print("Error fetching user profile: $e");
     }
   }
+
+    void updateUserProfile() {
+    fetchUserProfileInfo();
+  }
+  
 }

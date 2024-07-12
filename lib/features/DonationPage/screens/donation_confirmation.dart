@@ -4,11 +4,9 @@ import 'package:get/get.dart';
 import '../../../navigation_bar.dart';
 
 class DonationConfirmationPage extends StatelessWidget {
-  final String amount;
-  final String method;
 
   const DonationConfirmationPage(
-      {super.key, required this.amount, required this.method});
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

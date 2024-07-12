@@ -35,9 +35,8 @@ class PostSection extends StatelessWidget {
                 return CircleAvatar(
                   backgroundImage: controller.profilePicUrl.value.isNotEmpty
                       ? NetworkImage(controller.profilePicUrl.value)
-                      : const AssetImage(
-                              'assets/images/profile/sabbir_profile_pic.jpg')
-                          as ImageProvider,
+                      : const NetworkImage(
+                          'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='),
                   radius: 20,
                 );
               }),

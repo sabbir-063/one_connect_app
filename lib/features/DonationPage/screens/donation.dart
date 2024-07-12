@@ -2,24 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/features/DonationPage/screens/donation_confirmation.dart';
 
-class DonationPageScreen extends StatefulWidget {
-  const DonationPageScreen({super.key});
+import '../controllers/donation.controller.dart';
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _DonationPageScreenState createState() => _DonationPageScreenState();
-}
+class DonationPageScreen extends StatelessWidget {
+  DonationPageScreen({super.key});
 
-class _DonationPageScreenState extends State<DonationPageScreen> {
   final List<String> imgList = [
     'assets/images/donation/donate_1.png',
     'assets/images/donation/donate_2.jfif',
     'assets/images/donation/donate_3.png',
   ];
-  final TextEditingController amountController = TextEditingController();
-  String _selectedMethod = 'Bkash';
+
+  final DonationController controller = Get.put(DonationController());
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +49,6 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                 enableInfiniteScroll: true,
                 autoPlayAnimationDuration: const Duration(milliseconds: 800),
                 viewportFraction: 0.8,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                  });
-                },
               ),
               items: imgList.map((item) {
                 return Builder(
@@ -99,7 +90,7 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   TextFormField(
-                    controller: amountController,
+                    controller: controller.amountController,
                     decoration: const InputDecoration(
                       labelText: 'Amount (Taka)',
                       border: OutlineInputBorder(),
@@ -132,27 +123,30 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12.0),
-                  DropdownButtonFormField<String>(
-                    value: _selectedMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedMethod = value!;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'Select Method',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.payment),
-                    ),
-                    items: const [
-                      DropdownMenuItem(value: 'Bkash', child: Text('Bkash')),
-                      DropdownMenuItem(value: 'Nogod', child: Text('Nogod')),
-                      DropdownMenuItem(value: 'Rocket', child: Text('Rocket')),
-                      DropdownMenuItem(
-                          value: 'Online Banking',
-                          child: Text('Online Banking')),
-                    ],
-                  ),
+                  Obx(() {
+                    return DropdownButtonFormField<String>(
+                      value: controller.selectedMethod.value,
+                      onChanged: (value) {
+                        if (value != null) {
+                          controller.setSelectedMethod(value);
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Select Method',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.payment),
+                      ),
+                      items: const [
+                        DropdownMenuItem(value: 'Bkash', child: Text('Bkash')),
+                        DropdownMenuItem(value: 'Nogod', child: Text('Nogod')),
+                        DropdownMenuItem(
+                            value: 'Rocket', child: Text('Rocket')),
+                        DropdownMenuItem(
+                            value: 'Online Banking',
+                            child: Text('Online Banking')),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ),
@@ -161,15 +155,7 @@ class _DonationPageScreenState extends State<DonationPageScreen> {
             // Donate Button
             ElevatedButton(
               onPressed: () {
-                if (amountController.text.isNotEmpty) {
-                  Get.to(
-                    () => DonationConfirmationPage(
-                        amount: amountController.toString(),
-                        method: _selectedMethod),
-                  );
-                } else {
-                  // Optionally show an error message or handle validation
-                }
+                controller.handleDonation();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

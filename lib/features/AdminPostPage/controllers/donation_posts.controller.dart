@@ -35,6 +35,10 @@ class DonationPostsController extends GetxController {
     }
   }
 
+  void updatePostPage() {
+    fetchPosts();
+  }
+
   // void fetchPosts() {
   //   firestore
   //       .collection('Posts')

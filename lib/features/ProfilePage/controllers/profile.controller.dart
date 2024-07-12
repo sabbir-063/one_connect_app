@@ -7,6 +7,7 @@ import 'dart:io';
 import '../../../curr_user.dart';
 import '../../../models/CreatePostModel/admin_post_model.dart';
 import '../../../models/UserModel/user_model.dart';
+import '../../HomePage/controllers/createPost/post_image_name.controller.dart';
 
 class ProfileController extends GetxController {
   final Rx<UserModel> loggedUser = UserModel(
@@ -99,6 +100,8 @@ class ProfileController extends GetxController {
       loggedUser.update((user) {
         user?.profileUrl = downloadUrl;
       });
+      final controller2 = Get.find<PostImageNameController>();
+      controller2.updateUserProfile();
     } catch (e) {
       // print("Error updating profile picture: $e");
     }
