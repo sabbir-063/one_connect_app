@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/features/ProfilePage/controllers/logged_user.dart';
-import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_History.dart';
+import 'package:one_connect_app/curr_user.dart';
+import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_history.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 import 'package:one_connect_app/features/notification/screens/notification.dart';
-import 'package:one_connect_app/features/HomePage/screens/community/donation_post_card.dart';
-import 'package:one_connect_app/data/static_data/post_data/post_card_data.dart';
+
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/edit_profile.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/user_detailsitems.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../HomePage/screens/community/donation_post_card.dart';
+import '../controllers/profile.controller.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the LoggedUser controller
-    final LoggedUser userController = Get.put(LoggedUser());
+    // Initialize the ProfileController
+    // final ProfileController userController = Get.find<ProfileController>();
+    final ProfileController userController = Get.put(ProfileController());
+
+    final String userId = OneUser.currUserId;
 
     // Fetch user data when screen initializes
     Future.microtask(() async {
       await userController
-          .fetchUserData('userId'); // Replace 'userId' with actual user ID
+          .fetchUserData(userId); // Replace 'userId' with actual user ID
     });
 
     return Scaffold(
@@ -61,11 +67,26 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Profile Picture (Add your logic for profile picture)
-                      const CircleAvatar(
-                        radius: 50,
-                        backgroundImage: AssetImage(
-                            'assets/images/profile/sabbir_profile_pic.jpg'), // Placeholder or actual image URL
+                      // Profile Picture
+                      GestureDetector(
+                        onTap: () async {
+                          final ImagePicker picker = ImagePicker();
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (image != null) {
+                            await userController.updateProfilePicture(
+                                userId, image);
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundImage: userController
+                                  .loggedUser.value.profileUrl.isEmpty
+                              ? const NetworkImage(
+                                  'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=') // Placeholder URL
+                              : NetworkImage(
+                                  userController.loggedUser.value.profileUrl),
+                        ),
                       ),
                       const SizedBox(height: 10),
 
@@ -169,15 +190,14 @@ class ProfileScreen extends StatelessWidget {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final post = PostCardData.postCardData[index];
-                    return post.profileName ==
-                            '${userController.loggedUser.value.firstName} ${userController.loggedUser.value.lastName}'
-                        ? DonationPostCard(post: post)
-                        : const SizedBox.shrink();
+                    final post = userController.posts[index];
+                    return DonationPostCard(post: post);
                   },
-                  childCount: PostCardData.postCardData.length,
+                  childCount: userController.posts.length,
                 ),
               ),
+
+              //
             ],
           );
         }
@@ -186,7 +206,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void onSelected(
-      BuildContext context, int item, LoggedUser userController) async {
+      BuildContext context, int item, ProfileController userController) async {
     switch (item) {
       case 0:
         // Navigate to Edit Profile

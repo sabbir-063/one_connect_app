@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '../../controllers/donation/donatenow.controller.dart';
+
+import '../controllers/donate_now.controller.dart';
 
 class DonateNowButtonScreen extends StatelessWidget {
   const DonateNowButtonScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final DonateNowController controller = Get.put(DonateNowController());
 
-    // Retrieve arguments passed from the DonationPostCard
+    // Retrieve arguments passed from the DonationPostScreen
     final arguments = Get.arguments;
     controller.donationNeeded.value = arguments['donationNeeded'];
     controller.donationRaised.value = arguments['donationRaised'];

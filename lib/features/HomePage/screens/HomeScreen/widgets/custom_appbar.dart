@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:one_connect_app/features/HomePage/screens/createPost/create_post_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -24,19 +26,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: [
               IconButton(
-                icon: Icon(Icons.add, color: Colors.black),
+                icon: const Icon(Icons.add, color: Colors.black),
                 onPressed: () {
                   // Action for creating a post
+                  Get.to(() => const CreatePostPage());
                 },
               ),
               IconButton(
-                icon: Icon(Icons.search, color: Colors.black),
+                icon: const Icon(Icons.search, color: Colors.black),
                 onPressed: () {
                   // Action for searching a post
                 },
               ),
               IconButton(
-                icon: Icon(Icons.notifications, color: Colors.black),
+                icon: const Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {
                   // Action for notifications
                 },

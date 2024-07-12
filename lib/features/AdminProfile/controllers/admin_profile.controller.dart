@@ -1,15 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-import '../../authentication/screens/login/login.dart';
+import '../../../models/UserModel/admin_model.dart';
 
 class AdminController extends GetxController {
-  final String firstName = 'Shohan';
-  final String lastName = 'Shovo';
-  final String phone = '01860552999';
-  final String email = 'waterhorse.08@gmail.com';
+  final Rx<AdminModel> loggedUser = AdminModel(
+    name: '',
+    email: '',
+    password: '',
+  ).obs;
 
-  void logout() {
-    // Implement logout logic here, such as clearing session or navigating to login screen
-    Get.offAll(() => const LoginScreen());
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> fetchAdminData(String adminId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Admins').doc(adminId).get();
+      if (userDoc.exists) {
+        loggedUser.value =
+            AdminModel.fromMap(userDoc.data() as Map<String, dynamic>);
+      }
+    } catch (e) {
+      print("Error fetching Admin data: $e");
+    }
   }
 }

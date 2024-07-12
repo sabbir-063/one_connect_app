@@ -13,10 +13,10 @@ class AdminNavigationController extends GetxController {
 
   final screens = [
     const AdminPostScreen(),
-    AdminHomeScreen(),
+    const AdminHomeScreen(),
     AdminChatListScreen(),
     AdminUserlistScreen(),
-    AdminProfileScreen(),
+    const AdminProfileScreen(),
   ];
 }
 

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:one_connect_app/curr_user.dart';
 import '../../../../../navigation_bar.dart';
+import '../../../../common/userCredentials/user_preferences.dart';
+import '../../../ProfilePage/controllers/profile.controller.dart';
 
 class LoginController extends GetxController {
-  static LoginController get instance => Get.find();
+  final ProfileController userController = Get.put(ProfileController());
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -13,8 +16,35 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   var isPasswordHidden = true.obs;
 
+  var userCredentials = <Map<String, String>>[].obs;
+  var selectedEmail = ''.obs;
+  var selectedPassword = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadUserCredentials();
+  }
+
+  Future<void> _loadUserCredentials() async {
+    final credentials = await UserPreferences.getUserCredentials();
+    userCredentials.value = credentials;
+    update([
+      'credentialsDropdown'
+    ]); // Update the dropdown after loading credentials
+  }
+
+  void onCredentialSelected(Map<String, String> credential) {
+    selectedEmail.value = credential['email']!;
+    selectedPassword.value = credential['password']!;
+    emailController.text = selectedEmail.value;
+    passwordController.text = selectedPassword.value;
+    update(['emailField', 'passwordField']); // Update email and password fields
+  }
+
   void togglePasswordVisibility() {
     isPasswordHidden.value = !isPasswordHidden.value;
+    update(['passwordField']); // Update password field visibility
   }
 
   void login() async {
@@ -24,11 +54,23 @@ class LoginController extends GetxController {
           email: emailController.text,
           password: passwordController.text,
         );
-        print("Signed in: ${userCredential.user?.email}");
 
-        Get.offAll(() => const NavigationBarMenu());
+        // Fetch user data after successful login
+        final String userId = userCredential.user?.uid ?? '';
+        if (userId.isNotEmpty) {
+          // Initialize ProfileController and fetch user data
+          OneUser.currUserId = userId;
+          await userController.fetchUserData(userId);
+          // If login is successful, save credentials
+          await UserPreferences.saveUserCredentials(
+              emailController.text, passwordController.text);
+          // Navigate to the main application screen
+          Get.offAll(() => const NavigationBarMenu());
 
-        showCustomSnackBar('Success', 'User logged in successfully', true);
+          showCustomSnackBar('Success', 'User logged in successfully', true);
+        } else {
+          showCustomSnackBar('Error', 'Failed to retrieve user ID.', false);
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           showCustomSnackBar('Error', 'No user found for that email.', false);
@@ -96,11 +138,4 @@ class LoginController extends GetxController {
       progressIndicatorBackgroundColor: Colors.grey,
     );
   }
-
-  // @override
-  // void onClose() {
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   super.onClose();
-  // }
 }

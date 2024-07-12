@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
-import '../../controllers/donation/post_card_user.controller.dart';
+
+import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../controllers/post_card.controller.dart';
 import 'donate_now_button.dart';
 
-class DonationPostCard extends StatelessWidget {
-  final AdminPostModel post;
+class PostCardWidget extends StatelessWidget {
+  const PostCardWidget({
+    super.key,
+    required this.post,
+  });
 
-  const DonationPostCard({super.key, required this.post});
+  final AdminPostModel post;
 
   @override
   Widget build(BuildContext context) {
-    final PostCardUserController controller = Get.put(PostCardUserController());
+    final PostCardController controller = Get.put(PostCardController());
     return Card(
       margin: const EdgeInsets.all(10.0),
       child: Padding(
@@ -88,6 +92,6 @@ class DonationPostCard extends StatelessWidget {
       ),
     );
 
-
+    //
   }
 }

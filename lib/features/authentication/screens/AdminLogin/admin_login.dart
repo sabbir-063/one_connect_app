@@ -8,7 +8,6 @@ import '../login/login.dart';
 import 'widgets/admin_login_form.dart';
 import 'widgets/admin_login_title.dart';
 
-
 class AdminLoginScreen extends StatelessWidget {
   const AdminLoginScreen({super.key});
 
@@ -24,7 +23,7 @@ class AdminLoginScreen extends StatelessWidget {
               const AdminLoginTitle(),
 
               /// Form
-              const AdminLoginForm(),
+              AdminLoginForm(),
 
               const SizedBox(height: OneSizes.spaceBtwItems),
 
@@ -44,8 +43,6 @@ class AdminLoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-
             ],
           ),
         ),

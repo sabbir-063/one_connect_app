@@ -1,91 +1,76 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/models/UserModel/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:one_connect_app/curr_user.dart';
 
+import '../../../models/UserModel/user_model.dart';
 import '../../../navigation_bar.dart';
-import '../../ProfilePage/controllers/logged_user.dart';
 
 class EditProfileController extends GetxController {
-  // LoggedUser controller instance
-  final LoggedUser loggedUserController = Get.find<LoggedUser>();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Form key for validation
-  final formKey = GlobalKey<FormState>();
+  Rx<UserModel> loggedUser = UserModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    country: '',
+    state: '',
+    city: '',
+    birthday: '',
+    profileUrl: '',
+    password: '',
+  ).obs;
 
-  // Controllers for form fields
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
-  late TextEditingController passwordController;
-  late TextEditingController currentPasswordController;
-  late TextEditingController emailController;
-  late TextEditingController phoneController;
-  late TextEditingController countryController;
-  late TextEditingController stateController;
-  late TextEditingController cityController;
-  late TextEditingController birthdayController;
+  final currentPassword = ''.obs;
+  final newPassword = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Initialize controllers with current user data from loggedUser
-    final UserModel user = loggedUserController.loggedUser.value;
-
-    firstNameController = TextEditingController(text: user.firstName);
-    lastNameController = TextEditingController(text: user.lastName);
-    passwordController = TextEditingController();
-    currentPasswordController = TextEditingController();
-    emailController = TextEditingController(text: user.email);
-    phoneController = TextEditingController(text: user.phone);
-    countryController = TextEditingController(text: user.country);
-    stateController = TextEditingController(text: user.state);
-    cityController = TextEditingController(text: user.city);
-    birthdayController = TextEditingController(text: user.birthday);
-  }
-
-  void updateProfile() {
-    if (formKey.currentState!.validate()) {
-      // Check if the current password is correct
-      if (currentPasswordController.text !=
-          loggedUserController.loggedUser.value.password) {
-        Get.snackbar('Error', 'Current password is incorrect.',
-            snackPosition: SnackPosition.BOTTOM);
-        return;
+  Future<void> fetchUserData(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        loggedUser.value =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
       }
-
-      // Call updateProfile method from LoggedUser controller
-      loggedUserController.updateProfile(
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        country: countryController.text,
-        state: stateController.text,
-        city: cityController.text,
-        birthday: birthdayController.text,
-        password:
-            passwordController.text.isNotEmpty ? passwordController.text : null,
-      );
-
-      // Navigate back to the Profile tab
-      Get.find<NavigationController>().selectedIndx.value = 4;
-      Get.offAll(() => const NavigationBarMenu());
-
-      // Show a success message
-      Get.snackbar('Success', 'Profile updated successfully.',
-          snackPosition: SnackPosition.TOP);
+    } catch (e) {
+      print("Error fetching user data: $e");
     }
   }
 
-  @override
-  void onClose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    passwordController.dispose();
-    currentPasswordController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    countryController.dispose();
-    stateController.dispose();
-    cityController.dispose();
-    birthdayController.dispose();
-    super.onClose();
+  Future<void> updateUserProfile() async {
+    try {
+      Map<String, dynamic> updateData = {
+        'firstName': loggedUser.value.firstName,
+        'lastName': loggedUser.value.lastName,
+        'country': loggedUser.value.country,
+        'state': loggedUser.value.state,
+        'city': loggedUser.value.city,
+      };
+
+      if (currentPassword.isNotEmpty && newPassword.isNotEmpty) {
+        User? user = _auth.currentUser;
+        if (user != null) {
+          final cred = EmailAuthProvider.credential(
+            email: user.email!,
+            password: currentPassword.value,
+          );
+
+          await user.reauthenticateWithCredential(cred);
+          await user.updatePassword(newPassword.value);
+        }
+      }
+
+      await _firestore
+          .collection('Users')
+          .doc(OneUser.currUserId)
+          .update(updateData);
+
+      Get.offAll(() => const NavigationBarMenu());
+      Get.snackbar('Success', 'Profile updated successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update profile: $e');
+    }
   }
 }

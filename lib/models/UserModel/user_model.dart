@@ -1,4 +1,3 @@
-// UserModel class
 class UserModel {
   String firstName;
   String lastName;
@@ -11,6 +10,7 @@ class UserModel {
   String password;
   int donationGiven;
   int donationReceived;
+  String profileUrl;
 
   UserModel({
     required this.firstName,
@@ -24,6 +24,7 @@ class UserModel {
     required this.password,
     this.donationGiven = 0,
     this.donationReceived = 0,
+    this.profileUrl = '', // Default to an empty string if no profile URL is provided
   });
 
   // Convert UserModel to a map for Firestore
@@ -40,6 +41,7 @@ class UserModel {
       'password': password,
       'donationGiven': donationGiven,
       'donationReceived': donationReceived,
+      'profileUrl': profileUrl,
     };
   }
 
@@ -57,6 +59,7 @@ class UserModel {
       password: map['password'],
       donationGiven: map['donationGiven'] ?? 0,
       donationReceived: map['donationReceived'] ?? 0,
+      profileUrl: map['profileUrl'] ?? '',
     );
   }
 }

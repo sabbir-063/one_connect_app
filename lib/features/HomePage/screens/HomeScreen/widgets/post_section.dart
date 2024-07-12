@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/createPost/post_image_name.controller.dart';
 import '../../createPost/create_post_page.dart';
 
 class PostSection extends StatelessWidget {
@@ -8,6 +9,9 @@ class PostSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PostImageNameController controller =
+        Get.put(PostImageNameController());
+
     return Container(
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.all(10.0),
@@ -27,11 +31,16 @@ class PostSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1719656037678-ca9907d0b960?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Replace with your image URL
-                radius: 20,
-              ),
+              Obx(() {
+                return CircleAvatar(
+                  backgroundImage: controller.profilePicUrl.value.isNotEmpty
+                      ? NetworkImage(controller.profilePicUrl.value)
+                      : const AssetImage(
+                              'assets/images/profile/sabbir_profile_pic.jpg')
+                          as ImageProvider,
+                  radius: 20,
+                );
+              }),
               const SizedBox(width: 10),
               Expanded(
                 child: GestureDetector(
@@ -46,36 +55,19 @@ class PostSection extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 15.0),
-                    child: Text(
-                      "Why you need donation, Alice?",
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
+                    child: Obx(() {
+                      return Text(
+                        "Why you need donation, ${controller.firstname.value}?",
+                        style: TextStyle(color: Colors.grey[600]),
+                      );
+                    }),
                   ),
                 ),
               ),
             ],
           ),
-          // const Divider(height: 20, thickness: 1),
-          // const Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     PostButton(
-          //       icon: Icons.videocam,
-          //       color: Colors.red,
-          //       label: 'Live video',
-          //     ),
-          //     PostButton(
-          //       icon: Icons.photo_library,
-          //       color: Colors.green,
-          //       label: 'Photo/video',
-          //     ),
-          //     PostButton(
-          //       icon: Icons.insert_emoticon,
-          //       color: Colors.amber,
-          //       label: 'Feeling',
-          //     ),
-          //   ],
-          // ),
+
+          //
         ],
       ),
     );
