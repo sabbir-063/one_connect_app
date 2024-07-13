@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../models/UserModel/user_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../controllers/donator_list.controller.dart';
 
 class DonatorListScreen extends StatelessWidget {
@@ -13,108 +12,164 @@ class DonatorListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User List'),
+        title: const Text('Users List'),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        backgroundColor: OneColors.accent,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _buildSearchBar(),
-                const SizedBox(height: 16),
-                _buildSortDropdowns(),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                onChanged: userController.search,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  hintText: 'Search by name, email, country, or city',
+                  hintStyle: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: Obx(() {
-              if (userController.users.isEmpty) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+            const SizedBox(height: 16.0),
+
+            // User List
+            Expanded(
+              child: Obx(() {
+                if (userController.filteredUsers.isEmpty) {
+                  return const Center(child: Text('No users found.'));
+                }
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columnSpacing: 20.0,
+                    headingRowColor: WidgetStateColor.resolveWith(
+                        (states) => Colors.blueGrey.shade100),
+                    headingTextStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                    columns: const [
+                      DataColumn(label: Text('Rank')),
+                      DataColumn(label: Text('User Name')),
+                      DataColumn(label: Text('Badge')),
+                    ],
+                    rows: userController.filteredUsers.map((user) {
+                      int rank = userController.users.indexOf(user) + 1;
+                      String badge = _getBadge(rank);
+                      return DataRow(
+                        cells: [
+                          DataCell(
+                            Text(
+                              (userController.users.indexOf(user) + 1)
+                                  .toString(),
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              '${user.firstName} ${user.lastName}',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            badge.isNotEmpty
+                                ? _buildBadge(badge)
+                                : const SizedBox
+                                    .shrink(), // Display badge or empty SizedBox
+                          ),
+                        ],
+                        color: WidgetStateColor.resolveWith((states) {
+                          if (userController.users.indexOf(user) % 2 == 0) {
+                            return Colors.blueGrey.shade50;
+                          } else {
+                            return Colors.white;
+                          }
+                        }),
+                      );
+                    }).toList(),
+                  ),
                 );
-              } else {
-                return ListView.builder(
-                  itemCount: userController.users.length,
-                  itemBuilder: (context, index) {
-                    UserModel user = userController.users[index];
-                    return _buildUserListItem(user, index);
-                  },
-                );
-              }
+              }),
+            ),
+
+            // Pagination Controls
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: userController.previousPage,
+                  ),
+                  Text(
+                    'Page ${userController.currentPage.value}',
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward),
+                    onPressed: userController.nextPage,
+                  ),
+                ],
+              );
             }),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSearchBar() {
-    return TextField(
-      onChanged: (value) => userController.search(value),
-      decoration: const InputDecoration(
-        hintText: 'Search by name, email, or phone',
-        prefixIcon: Icon(Icons.search),
-        border: OutlineInputBorder(),
+  // Helper function to determine badge based on rank
+  String _getBadge(int rank) {
+    if (rank <= 2) {
+      return 'Gold';
+    } else if (rank <= 5) {
+      return 'Silver';
+    } else if (rank <= 8) {
+      return 'Bronze';
+    }
+    return ''; // No badge for other ranks
+  }
+
+  // Helper function to build badge widget
+  Widget _buildBadge(String badge) {
+    Color badgeColor = Colors.yellow; // Default badge color
+
+    if (badge == 'Silver') {
+      badgeColor = Colors.grey;
+    } else if (badge == 'Bronze') {
+      badgeColor = Colors.orange;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: badgeColor,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Text(
+        badge,
+        style: const TextStyle(
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
       ),
     );
   }
-
-  Widget _buildSortDropdowns() {
-    return Row(
-      children: [
-        Expanded(
-          child: DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: 'Sort by',
-            ),
-            value: userController.sortBy,
-            onChanged: (value) => userController.setSortBy(value!),
-            items: const [
-              DropdownMenuItem(value: 'name', child: Text('Name')),
-              DropdownMenuItem(value: 'email', child: Text('Email')),
-              DropdownMenuItem(value: 'phone', child: Text('Phone')),
-              DropdownMenuItem(
-                  value: 'donationGiven', child: Text('Donation Given')),
-              DropdownMenuItem(
-                  value: 'donationReceived', child: Text('Donation Received')),
-            ],
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: DropdownButtonFormField<bool>(
-            decoration: const InputDecoration(
-              labelText: 'Order',
-            ),
-            value: userController.sortAscending,
-            onChanged: (value) => userController.setSortAscending(value!),
-            items: const [
-              DropdownMenuItem(value: true, child: Text('Low to High')),
-              DropdownMenuItem(value: false, child: Text('High to Low')),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUserListItem(UserModel user, int index) {
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: ListTile(
-        leading: CircleAvatar(
-          child: Text('${index + 1}'), // Show rank number as fallback
-        ),
-        title: Text('${user.firstName} ${user.lastName}'),
-        subtitle: const Text('Donation Given: *** Tk'),
-
-      ),
-    );
-  }
-
-
 }

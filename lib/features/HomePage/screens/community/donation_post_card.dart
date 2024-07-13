@@ -21,7 +21,10 @@ class DonationPostCard extends StatelessWidget {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(post.profilePicUrl),
+                backgroundImage: post.profilePicUrl.isEmpty
+                    ? const NetworkImage(
+                        'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=')
+                    : NetworkImage(post.profilePicUrl),
               ),
               title: Text(post.profileName),
               subtitle: Text(post.timeAgo),
@@ -87,7 +90,5 @@ class DonationPostCard extends StatelessWidget {
         ),
       ),
     );
-
-
   }
 }

@@ -2,15 +2,11 @@ class AdminModel {
   String name;
   String email;
   String password;
-  int donationGiven;
-  int donationReceived;
 
   AdminModel({
     required this.name,
     required this.email,
     required this.password,
-    this.donationGiven = 0,
-    this.donationReceived = 0,
   });
 
   // Convert AdminModel to a map for Firestore
@@ -19,8 +15,6 @@ class AdminModel {
       'name': name,
       'email': email,
       'password': password,
-      'donationGiven': donationGiven,
-      'donationReceived': donationReceived,
     };
   }
 
@@ -30,8 +24,6 @@ class AdminModel {
       name: map['name'],
       email: map['email'],
       password: map['password'],
-      donationGiven: map['donationGiven'] ?? 0,
-      donationReceived: map['donationReceived'] ?? 0,
     );
   }
 }

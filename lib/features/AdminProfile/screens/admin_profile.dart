@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 import '../../../curr_user.dart';
+// import '../../AdminAnalysis/data.controller.dart';
+import '../../AdminAnalysis/donation_chats.dart';
 import '../../AdminNotification/screens/admin_notification.dart';
 import '../controllers/admin_profile.controller.dart';
 
@@ -15,8 +18,9 @@ class AdminProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Profile'),
+        title: const Text('OneConnect Statics'),
         centerTitle: true,
+        backgroundColor: OneColors.accent,
         automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton<int>(
@@ -88,7 +92,7 @@ class AdminProfileScreen extends StatelessWidget {
                                 ),
                                 Obx(() {
                                   return Text(
-                                    '${adminController.loggedUser.value.donationGiven} Tk',
+                                    '${adminController.donationGiven} Tk',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -108,7 +112,7 @@ class AdminProfileScreen extends StatelessWidget {
                                 ),
                                 Obx(() {
                                   return Text(
-                                    '${adminController.loggedUser.value.donationReceived} Tk',
+                                    '${adminController.fundRaised} Tk',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -117,6 +121,27 @@ class AdminProfileScreen extends StatelessWidget {
                                 }),
                               ],
                             ),
+                            Column(
+                              children: [
+                                const Text(
+                                  'Fund Remaining',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Obx(() {
+                                  return Text(
+                                    '${adminController.totalRemainingCapital} Tk',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                            //
                           ],
                         ),
                         const SizedBox(height: 20),
@@ -151,6 +176,32 @@ class AdminProfileScreen extends StatelessWidget {
                         const SizedBox(height: 10),
 
                         // Additional widgets can go here if needed
+
+                        // Charts
+                        Obx(() {
+                          if (adminController.isLoadingCharts.value) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                DonationGivenChart(
+                                    users:
+                                        adminController.dataController.users),
+                                DonationReceivedChart(
+                                    users:
+                                        adminController.dataController.users),
+                                DonationNeededVsRaisedChart(
+                                    posts:
+                                        adminController.dataController.posts),
+                                DaywisePostCountChart(
+                                    posts:
+                                        adminController.dataController.posts),
+                              ],
+                            );
+                          }
+                        }),
                       ],
                     ),
                   ),

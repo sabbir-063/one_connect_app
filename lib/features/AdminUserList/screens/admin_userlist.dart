@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 
 import '../controllers/admin_userlist.controller.dart';
 
@@ -12,9 +13,10 @@ class AdminUserlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User List'),
+        title: const Text('Users List'),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        backgroundColor: OneColors.accent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -133,7 +135,7 @@ class AdminUserlistScreen extends StatelessWidget {
                             ),
                           ),
                         ],
-                        color: MaterialStateColor.resolveWith((states) {
+                        color: WidgetStateColor.resolveWith((states) {
                           if (controller.users.indexOf(user) % 2 == 0) {
                             return Colors.blueGrey.shade50;
                           } else {

@@ -1,4 +1,6 @@
 // admin_post_model.dart
+import 'package:intl/intl.dart';
+
 class AdminPostModel {
   String id; // New field for document ID
   final String userId;
@@ -26,6 +28,9 @@ class AdminPostModel {
     this.adminChecked = false,
   });
 
+  DateTime get timestamp {
+    return DateFormat('dd/MM/yyyy hh:mm a').parse(timeAgo);
+  }
   // Convert AdminPostModel to a map for Firestore
   Map<String, dynamic> toMap() {
     return {

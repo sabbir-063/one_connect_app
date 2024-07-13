@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/widgets/thanks_for_donation.dart';
 import '../../../curr_user.dart';
+import '../../AdminProfile/controllers/admin_profile.controller.dart';
 
 class DonateNowController extends GetxController {
   var donationNeeded = 0.obs;
@@ -38,13 +39,12 @@ class DonateNowController extends GetxController {
       Get.snackbar('Error', 'Central Fund have insufficient balance');
     } else {
       // Navigate to Thanks for Donation page
-      await _updateDonationDetails(donationAmount, centralRemaining);
+      await _updateDonationDetails(donationAmount);
       Get.to(() => const ThanksForDonationPage());
     }
   }
 
-  Future<void> _updateDonationDetails(
-      int donationAmount, int centralRemaining) async {
+  Future<void> _updateDonationDetails(int donationAmount) async {
     final firestore = FirebaseFirestore.instance;
 
     // Update donationRaised in the Posts collection
@@ -61,33 +61,26 @@ class DonateNowController extends GetxController {
     final currentUserDoc = firestore.collection('CentralFund').doc(currUser);
     final seekerUserDoc = firestore.collection('Users').doc(userId.value);
 
-    await firestore.runTransaction((transaction) async {
-      final currentUserSnapshot = await transaction.get(currentUserDoc);
-      final seekerUserSnapshot = await transaction.get(seekerUserDoc);
+    final currentUserSnapshot = await currentUserDoc.get();
+    final seekerUserSnapshot = await seekerUserDoc.get();
 
-      if (!currentUserSnapshot.exists || !seekerUserSnapshot.exists) {
-        throw Exception('User does not exist');
-      }
-
-      int currentUserDonationGiven =
-          currentUserSnapshot.data()?['donationGiven'] ?? 0;
-      int seekerUserDonationReceived =
-          seekerUserSnapshot.data()?['donationReceived'] ?? 0;
-
-      transaction.update(currentUserDoc, {
-        'donationGiven': currentUserDonationGiven + donationAmount,
+    if (currentUserSnapshot.exists) {
+      int currValue = currentUserSnapshot.data()?['totalRemainingCapital'] ?? 0;
+      int currValue2 = currentUserSnapshot.data()?['donationGiven'] ?? 0;
+      await currentUserDoc.update({
+        'totalRemainingCapital': currValue - donationAmount,
+        'donationGiven': currValue2 + donationAmount,
       });
+    }
 
-      transaction.update(currentUserDoc, {
-        'totalRemainingCapital': currentUserDonationGiven - donationAmount,
+    if (seekerUserSnapshot.exists) {
+      int currValue = seekerUserSnapshot.data()?['donationReceived'] ?? 0;
+      await seekerUserDoc.update({
+        'donationReceived': currValue + donationAmount,
       });
+    }
 
-      transaction.update(seekerUserDoc, {
-        'donationReceived': seekerUserDonationReceived + donationAmount,
-      });
-    });
-
-    // Update local donationRaised value
-    donationRaised.value += donationAmount;
+    final AdminController controller2 = Get.put(AdminController());
+    controller2.updateAdminValue();
   }
 }

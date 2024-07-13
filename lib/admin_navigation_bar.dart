@@ -58,8 +58,8 @@ class AdminNavigationBarMenu extends StatelessWidget {
                 label: "User List",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Iconsax.user),
-                label: "Profile",
+                icon: Icon(Iconsax.bus),
+                label: "Statics",
               ),
             ],
           ),

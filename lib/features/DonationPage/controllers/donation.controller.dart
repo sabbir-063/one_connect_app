@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../curr_user.dart';
+import '../../AdminProfile/controllers/admin_profile.controller.dart';
 import '../screens/donation_confirmation.dart';
 
 class DonationController extends GetxController {
@@ -40,6 +41,11 @@ class DonationController extends GetxController {
         await centralFundDoc.update({
           'fundRaised': currValue + amount,
         });
+        int currValue2 =
+            centralFundSnapshot.data()?['totalRemainingCapital'] ?? 0;
+        await centralFundDoc.update({
+          'totalRemainingCapital': currValue2 + amount,
+        });
       }
 
       //user donationGiven update
@@ -55,6 +61,9 @@ class DonationController extends GetxController {
           'donationGiven': currValue + amount,
         });
       }
+
+      final AdminController controller3 = Get.put(AdminController());
+      controller3.updateAdminValue();
     } catch (e) {
       // print("Error updating central fund: $e");
     }

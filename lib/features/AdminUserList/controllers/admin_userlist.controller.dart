@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import '../../../data/static_data/user_list/user_data2.dart';
+
 import '../../../models/UserModel/user_model.dart';
 
 class AdminUserController extends GetxController {
@@ -15,16 +16,22 @@ class AdminUserController extends GetxController {
     fetchUsers();
   }
 
-  void fetchUsers() {
-    users.value = UserData2.users;
+  Future<void> fetchUsers() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('Users').get();
+    if (querySnapshot.docs.isNotEmpty) {
+      users.assignAll(querySnapshot.docs
+          .map((doc) => UserModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList());
+    }
+
     users.sort((a, b) => b.donationGiven.compareTo(a.donationGiven));
     assignRanks();
     applySearchAndPagination();
   }
 
   void assignRanks() {
-    for (int i = 0; i < users.length; i++) {
-    }
+    for (int i = 0; i < users.length; i++) {}
   }
 
   void applySearchAndPagination() {
