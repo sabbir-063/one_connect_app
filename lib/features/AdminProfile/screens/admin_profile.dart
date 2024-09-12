@@ -7,6 +7,7 @@ import '../../../curr_user.dart';
 import '../../AdminAnalysis/donation_chats.dart';
 import '../../AdminNotification/screens/admin_notification.dart';
 import '../controllers/admin_profile.controller.dart';
+import 'admin_donation_history.dart';
 
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
@@ -153,6 +154,7 @@ class AdminProfileScreen extends StatelessWidget {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Navigate to Donation History
+                                  Get.to(() => AdminDonationHistorypage());
                                 },
                                 child: const Text('Donation History'),
                               ),

@@ -143,9 +143,7 @@ class ProfileScreen extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () {
                                 // Navigate to Donation History
-                                Get.to(() => DonationHistoryPage(
-                                    email:
-                                        userController.loggedUser.value.email));
+                                Get.to(() => DonationHistoryPage());
                               },
                               child: const Text('Donation History'),
                             ),

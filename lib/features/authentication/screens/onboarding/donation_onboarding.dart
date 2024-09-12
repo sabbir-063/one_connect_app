@@ -6,7 +6,7 @@ import 'package:one_connect_app/utils/constants/colors.dart';
 class DonationOnboardingPage extends StatelessWidget {
   final List<Map<String, String>> featureList = [
     {
-      'title': 'Seek Donation',
+      'title': 'Seeking Donation',
       'description':
           'Users can post requests for donations and receive support from the community.',
       'image':

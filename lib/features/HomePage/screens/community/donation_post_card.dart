@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
 import '../../controllers/donation/post_card_user.controller.dart';
 import 'donate_now_button.dart';
@@ -57,15 +58,19 @@ class DonationPostCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: () async {
                     // Add your donation logic here
-                    String phoneNumber =
-                        await controller.getUserPhoneNumber(post.userId);
-                    Get.to(() => const DonateNowButtonScreen(), arguments: {
-                      'donationNeeded': post.donationNeeded,
-                      'donationRaised': post.donationRaised,
-                      'phoneNumber': phoneNumber,
-                      'userId': post.userId,
-                      'postId': post.id,
-                    });
+                    if (post.userId != OneUser.currUserId) {
+                      String phoneNumber =
+                          await controller.getUserPhoneNumber(post.userId);
+                      Get.to(() => const DonateNowButtonScreen(), arguments: {
+                        'donationNeeded': post.donationNeeded,
+                        'donationRaised': post.donationRaised,
+                        'phoneNumber': phoneNumber,
+                        'userId': post.userId,
+                        'postId': post.id,
+                      });
+                    } else {
+                      Get.snackbar('Error', "You can't donate yourself");
+                    }
                   },
                   icon: const Icon(Icons.volunteer_activism),
                   label: const Text('Donate'),

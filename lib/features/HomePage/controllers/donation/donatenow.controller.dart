@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
 
 import '../../../../common/widgets/thanks_for_doantion_user.dart';
+import '../../../../models/DonationModel/donation_tracker.dart';
 
 class DonateNowController extends GetxController {
   var donationNeeded = 0.obs;
@@ -22,16 +23,20 @@ class DonateNowController extends GetxController {
   }
 
   Future<void> validateDonationAmount() async {
-    int maxAmount = donationNeeded.value - donationRaised.value;
-    int donationAmount = int.tryParse(amountController.text) ?? 0;
+    try {
+      int maxAmount = donationNeeded.value - donationRaised.value;
+      int donationAmount = int.tryParse(amountController.text) ?? 0;
 
-    if (donationAmount <= 0 || donationAmount > maxAmount) {
-      Get.snackbar('Error', 'Please enter a valid amount (1 - $maxAmount)');
-    } else {
-      // Navigate to Thanks for Donation page
-      await _updateDonationDetails(donationAmount);
+      if (donationAmount <= 0 || donationAmount > maxAmount) {
+        Get.snackbar('Error', 'Please enter a valid amount (1 - $maxAmount)');
+      } else {
+        // Navigate to Thanks for Donation page
+        await _updateDonationDetails(donationAmount);
 
-      Get.to(() => const ThanksForDonationScreen());
+        Get.to(() => const ThanksForDonationScreen());
+      }
+    } catch (e) {
+      print('jahmela hocce donate korte user end a');
     }
   }
 
@@ -73,6 +78,18 @@ class DonateNowController extends GetxController {
         'donationReceived': seekerUserDonationReceived + donationAmount,
       });
     });
+
+    //donation tracker collection add a row
+    DonationTracker newDonation = DonationTracker(
+      donatorId: currUser,
+      receiverId: userId.value,
+      amount: donationAmount,
+      type: 'user', // Adjust as necessary
+      time: DateTime.now(),
+      donationMedia: selectedMethod.value,
+      postId: postId.value,
+    );
+    await firestore.collection('DonationTracker').add(newDonation.toMap());
 
     // Update local donationRaised value
     donationRaised.value += donationAmount;

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../controllers/donation_history.controller.dart';
+import '../controllers/admin_donation_history.controller.dart';
 
-class DonationHistoryPage extends StatelessWidget {
-  DonationHistoryPage({super.key});
+class AdminDonationHistorypage extends StatelessWidget {
+  AdminDonationHistorypage({super.key});
 
-  final DonationHistoryController controller =
-      Get.put(DonationHistoryController());
+  final AdminDonationHistoryController controller =
+      Get.put(AdminDonationHistoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class DonationHistoryPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Donation History'),
+        title: const Text('Admin Donation History'),
         centerTitle: true,
       ),
       body: Padding(

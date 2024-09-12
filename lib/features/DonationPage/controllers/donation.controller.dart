@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../curr_user.dart';
+import '../../../models/DonationModel/donation_tracker.dart';
 import '../../AdminProfile/controllers/admin_profile.controller.dart';
 import '../screens/donation_confirmation.dart';
 
@@ -61,6 +62,20 @@ class DonationController extends GetxController {
           'donationGiven': currValue + amount,
         });
       }
+
+      //donation tracker collection add a row
+      DonationTracker newDonation = DonationTracker(
+        donatorId: OneUser.currUserId,
+        receiverId: OneUser.centralFundId,
+        amount: amount,
+        type: 'Central Fund regular', // Adjust as necessary
+        time: DateTime.now(),
+        donationMedia: selectedMethod.value,
+        postId: '0',
+      );
+      await FirebaseFirestore.instance
+          .collection('DonationTracker')
+          .add(newDonation.toMap());
 
       final AdminController controller3 = Get.put(AdminController());
       controller3.updateAdminValue();

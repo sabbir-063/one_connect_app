@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:one_connect_app/curr_user.dart';
-import 'package:one_connect_app/models/DonationModel/donation_tracker.dart';
 
-class DonationHistoryController extends GetxController {
+import '../../../curr_user.dart';
+import '../../../models/DonationModel/donation_tracker.dart';
+
+class AdminDonationHistoryController extends GetxController {
   var donations = <DonationTracker>[].obs;
   var filteredDonations = <DonationTracker>[].obs;
   var startDate = DateTime.now().subtract(const Duration(days: 30)).obs;
@@ -18,7 +19,7 @@ class DonationHistoryController extends GetxController {
     try {
       final snapshot = await firestore
           .collection('DonationTracker')
-          .where('donatorId', isEqualTo: OneUser.currUserId)
+          .where('donatorId', isEqualTo: OneUser.centralFundId)
           .get();
 
       final fetchedDonations = snapshot.docs.map((doc) {

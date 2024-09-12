@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/widgets/thanks_for_donation.dart';
 import '../../../curr_user.dart';
+import '../../../models/DonationModel/donation_tracker.dart';
 import '../../AdminProfile/controllers/admin_profile.controller.dart';
 
 class DonateNowController extends GetxController {
@@ -79,6 +80,18 @@ class DonateNowController extends GetxController {
         'donationReceived': currValue + donationAmount,
       });
     }
+
+    //donation tracker collection add a row
+    DonationTracker newDonation = DonationTracker(
+      donatorId: OneUser.centralFundId,
+      receiverId: userId.value,
+      amount: donationAmount,
+      type: 'Admin given', // Adjust as necessary
+      time: DateTime.now(),
+      donationMedia: selectedMethod.value,
+      postId: '1',
+    );
+    await firestore.collection('DonationTracker').add(newDonation.toMap());
 
     final AdminController controller2 = Get.put(AdminController());
     controller2.updateAdminValue();
