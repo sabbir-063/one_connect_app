@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:one_connect_app/features/AdminProfile/screens/admin_received_fund.dart';
 import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
 import '../../../curr_user.dart';
@@ -166,8 +167,29 @@ class AdminProfileScreen extends StatelessWidget {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Navigate to Received Organization
+                                  Get.to(() => AdminReceivedFundpage());
                                 },
                                 child: const Text('Received Fund'),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 10),
+                        //create post button
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Navigate to Donation History
+                                  //Get.to(() => AdminDonationHistorypage());
+                                },
+                                child: const Text(
+                                  'Create Post',
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
                             ),
                           ],
