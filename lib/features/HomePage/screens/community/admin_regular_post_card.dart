@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:one_connect_app/curr_user.dart';
-import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
-import '../../controllers/donation/post_card_user.controller.dart';
-import 'donate_now_button.dart';
+import 'package:iconsax/iconsax.dart';
 
-class DonationPostCard extends StatelessWidget {
+import '../../../../models/CreatePostModel/admin_post_model.dart';
+
+class AdminRegularPostCard extends StatelessWidget {
   final AdminPostModel post;
 
-  const DonationPostCard({super.key, required this.post});
+  const AdminRegularPostCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
-    final PostCardUserController controller = Get.put(PostCardUserController());
     return Card(
       margin: const EdgeInsets.all(10.0),
       child: Padding(
@@ -36,45 +33,16 @@ class DonationPostCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
-            Text(
-              'Donation Needed: ${post.donationNeeded} Tk',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Donation Raised: ${post.donationRaised} Tk',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-            const SizedBox(height: 10),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton.icon(
-                  onPressed: () async {
+                  onPressed: () {
                     // Add your donation logic here
-                    if (post.userId != OneUser.currUserId) {
-                      String phoneNumber =
-                          await controller.getUserPhoneNumber(post.userId);
-                      Get.to(() => const DonateNowButtonScreen(), arguments: {
-                        'donationNeeded': post.donationNeeded,
-                        'donationRaised': post.donationRaised,
-                        'phoneNumber': phoneNumber,
-                        'userId': post.userId,
-                        'postId': post.id,
-                      });
-                    } else {
-                      Get.snackbar('Error', "You can't donate yourself");
-                    }
                   },
-                  icon: const Icon(Icons.volunteer_activism),
-                  label: const Text('Donate'),
+                  icon: const Icon(Iconsax.heart),
+                  label: const Text('Like'),
                 ),
                 TextButton.icon(
                   onPressed: () {

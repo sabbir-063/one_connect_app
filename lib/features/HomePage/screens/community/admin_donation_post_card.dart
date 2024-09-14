@@ -5,10 +5,10 @@ import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
 import '../../controllers/donation/post_card_user.controller.dart';
 import 'donate_now_button.dart';
 
-class DonationPostCard extends StatelessWidget {
+class AdminDonationPostCard extends StatelessWidget {
   final AdminPostModel post;
 
-  const DonationPostCard({super.key, required this.post});
+  const AdminDonationPostCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +52,11 @@ class DonationPostCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
+
+            //images
+
+
+            const SizedBox(height: 10),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,9 +64,9 @@ class DonationPostCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: () async {
                     // Add your donation logic here
-                    if (post.userId != OneUser.currUserId) {
+                    if (post.userId != OneUser.currAdminId) {
                       String phoneNumber =
-                          await controller.getUserPhoneNumber(post.userId);
+                          await controller.getCentralPhoneNumber(post.userId);
                       Get.to(() => const DonateNowButtonScreen(), arguments: {
                         'donationNeeded': post.donationNeeded,
                         'donationRaised': post.donationRaised,

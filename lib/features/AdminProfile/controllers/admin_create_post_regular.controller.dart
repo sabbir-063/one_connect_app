@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../curr_user.dart';
-import '../../../models/CreatePostModel/admin_regular_model.dart';
+import '../../../models/CreatePostModel/admin_post_model.dart';
 import '../screens/admin_post_confirmation.dart';
 
 class AdminCreatePostRegularController extends GetxController {
@@ -82,11 +82,12 @@ class AdminCreatePostRegularController extends GetxController {
         DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
     try {
       List<String> imageUrls = await _uploadImages(userId);
-      AdminRegularModel newPost = AdminRegularModel(
+      AdminPostModel newPost = AdminPostModel(
         userId: userId,
         profileName: profileName.value,
         profilePicUrl: profilePicUrl.value,
         timeAgo: formattedTime, // You can set an actual timestamp here
+        donationNeeded: 0,
         postMessage: textController.text,
         imageUrls: imageUrls,
       );

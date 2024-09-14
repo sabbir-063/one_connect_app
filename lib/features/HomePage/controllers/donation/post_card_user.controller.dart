@@ -23,4 +23,27 @@ class PostCardUserController extends GetxController {
       return '';
     }
   }
+
+  Future<String> getCentralPhoneNumber(String userID) async {
+
+    try {
+      // Access the document of the given userID in CentralFund collection
+      DocumentSnapshot userDoc =
+          await _firestore.collection('CentralFund').doc(userID).get();
+
+      // Check if the document exists
+      if (userDoc.exists) {
+        // Extract the phonenumber field from the document
+        String phoneNumber = userDoc['phoneNumber'];
+        return phoneNumber;
+      } else {
+        print('CentralFund user not found');
+        return 'null';
+      }
+    } catch (e) {
+      // Handle error
+      print('Error fetching user phone number: $e');
+      return 'null';
+    }
+  }
 }
