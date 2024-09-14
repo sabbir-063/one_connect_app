@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../controllers/Admin_create_post_donation.controller.dart';
+import '../controllers/admin_create_post_regular.controller.dart';
 
-class AdminCreatePostPage extends StatelessWidget {
-  const AdminCreatePostPage({super.key});
+class AdminCreatePostRegularPage extends StatelessWidget {
+  const AdminCreatePostRegularPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AdminCreatePostDonationController controller =
-        Get.put(AdminCreatePostDonationController());
+    final AdminCreatePostRegularController controller =
+        Get.put(AdminCreatePostRegularController());
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Donation Post'),
+        title: const Text('Admin Regular Post'),
         actions: [
           Container(
             height: 50,
@@ -60,34 +60,34 @@ class AdminCreatePostPage extends StatelessWidget {
                     onChanged: (_) => controller.update(),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    const Text(
-                      "Donation needed : ",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: controller.donationController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "",
-                          border: InputBorder.none,
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                        ),
-                        onChanged: (_) => controller.update(),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Taka',
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    const SizedBox(width: 20),
-                  ],
-                ),
+                // const SizedBox(height: 10),
+                // Row(
+                //   children: [
+                //     const Text(
+                //       "Donation needed : ",
+                //       style: TextStyle(fontSize: 25),
+                //     ),
+                //     Expanded(
+                //       child: TextField(
+                //         controller: controller.donationController,
+                //         keyboardType: TextInputType.number,
+                //         decoration: InputDecoration(
+                //           hintText: "",
+                //           border: InputBorder.none,
+                //           filled: true,
+                //           fillColor: Colors.grey[200],
+                //         ),
+                //         onChanged: (_) => controller.update(),
+                //       ),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     const Text(
+                //       'Taka',
+                //       style: TextStyle(fontSize: 25),
+                //     ),
+                //     const SizedBox(width: 20),
+                //   ],
+                // ),
                 const SizedBox(height: 10),
                 Obx(
                   () => Wrap(

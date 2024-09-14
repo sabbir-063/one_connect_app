@@ -8,6 +8,8 @@ import '../../../curr_user.dart';
 import '../../AdminAnalysis/donation_chats.dart';
 import '../../AdminNotification/screens/admin_notification.dart';
 import '../controllers/admin_profile.controller.dart';
+import 'admin_create_post_donation.dart';
+import 'admin_create_post_regular.dart';
 import 'admin_donation_history.dart';
 
 class AdminProfileScreen extends StatelessWidget {
@@ -176,20 +178,30 @@ class AdminProfileScreen extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 10),
-                        //create post button
 
+                        //create posts button
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to Donation History
-                                  //Get.to(() => AdminDonationHistorypage());
+                                  // Navigate to regular post
+                                  Get.to(
+                                      () => const AdminCreatePostRegularPage());
                                 },
-                                child: const Text(
-                                  'Create Post',
-                                  style: TextStyle(fontSize: 20),
-                                ),
+                                child: const Text('Regular Post'),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ), // Small space between the buttons
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Navigate to donation post
+                                  Get.to(() => const AdminCreatePostPage());
+                                },
+                                child: const Text('Donation Post'),
                               ),
                             ),
                           ],

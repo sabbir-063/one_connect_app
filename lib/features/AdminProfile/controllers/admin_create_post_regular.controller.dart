@@ -8,14 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../curr_user.dart';
-import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../../../models/CreatePostModel/admin_regular_model.dart';
 import '../screens/admin_post_confirmation.dart';
 
-class AdminCreatePostDonationController extends GetxController {
+class AdminCreatePostRegularController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final textController = TextEditingController();
-  final donationController = TextEditingController();
   final photos = <XFile>[].obs;
   var profileName = 'One Connect Admin'.obs;
   var profilePicUrl = ''.obs;
@@ -52,11 +51,11 @@ class AdminCreatePostDonationController extends GetxController {
           backgroundColor: Colors.red, colorText: Colors.white);
       return false;
     }
-    if (donationController.text.isEmpty) {
-      Get.snackbar('Error', 'Please enter the amount of donation needed',
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return false;
-    }
+    // if (donationController.text.isEmpty) {
+    //   Get.snackbar('Error', 'Please enter the amount of donation needed',
+    //       backgroundColor: Colors.red, colorText: Colors.white);
+    //   return false;
+    // }
     // if (photos.isEmpty) {
     //   Get.snackbar('Error', 'Please add at least one image',
     //       backgroundColor: Colors.red, colorText: Colors.white);
@@ -83,17 +82,16 @@ class AdminCreatePostDonationController extends GetxController {
         DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
     try {
       List<String> imageUrls = await _uploadImages(userId);
-      AdminPostModel newPost = AdminPostModel(
+      AdminRegularModel newPost = AdminRegularModel(
         userId: userId,
         profileName: profileName.value,
         profilePicUrl: profilePicUrl.value,
         timeAgo: formattedTime, // You can set an actual timestamp here
         postMessage: textController.text,
-        donationNeeded: int.parse(donationController.text),
         imageUrls: imageUrls,
       );
 
-      await _firestore.collection('AdminPosts').add(newPost.toMap());
+      await _firestore.collection('AdminRegularPosts').add(newPost.toMap());
       Get.to(() => const AdminPostConfirmationPage());
     } catch (e) {
       Get.snackbar('Error', 'Failed to create post: $e',
