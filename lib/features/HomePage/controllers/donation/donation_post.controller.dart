@@ -5,7 +5,7 @@ import 'package:one_connect_app/curr_user.dart';
 import '../../../../models/CreatePostModel/admin_post_model.dart';
 
 class DonationPostsUserController extends GetxController {
-  var posts = <AdminPostModel>[].obs;
+  // var posts = <AdminPostModel>[].obs;
   var filteredPosts = <AdminPostModel>[].obs;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var selectedCategoryIndex = 0.obs; // Track the selected category
@@ -53,6 +53,7 @@ class DonationPostsUserController extends GetxController {
               post.userId != OneUser.currUserId;
         }).toList();
 
+        //setting filteredpost
         filteredPosts.value = filterPosts.map((doc) {
           final data = doc.data();
           return AdminPostModel.fromMap(data)..id = doc.id;

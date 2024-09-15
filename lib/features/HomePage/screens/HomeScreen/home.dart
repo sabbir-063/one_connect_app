@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/HomePage/controllers/donation/donation_post.controller.dart';
 import 'package:one_connect_app/features/HomePage/screens/HomeScreen/widgets/post_section.dart';
+import '../community/admin_donation_post_card.dart';
 import '../community/admin_regular_post_card.dart';
 import '../community/donation_post_card.dart';
 import 'widgets/custom_appbar.dart';
@@ -84,7 +85,7 @@ class HomeScreen extends StatelessWidget {
               const SliverFillRemaining(
                 child: Center(
                   child: Text(
-                    'No posts available for donation',
+                    'No posts available.',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -103,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                     // ignore: curly_braces_in_flow_control_structures
                     else
                       // ignore: curly_braces_in_flow_control_structures
-                      return DonationPostCard(post: post);
+                      return AdminDonationPostCard(post: post);
                   },
                   childCount: controller.filteredPosts.length,
                 ),

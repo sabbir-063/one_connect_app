@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../../models/CreatePostModel/admin_post_model.dart';
 
@@ -33,6 +34,25 @@ class AdminRegularPostCard extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
+
+            //show images
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: post.imageUrls.map((url) {
+                return GestureDetector(
+                  onTap: () => showEnlargedImage(context, url),
+                  child: Image.network(
+                    url,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 10),
+
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,6 +83,36 @@ class AdminRegularPostCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showEnlargedImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              Center(
+                child: PhotoView(
+                  imageProvider: NetworkImage(imageUrl),
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

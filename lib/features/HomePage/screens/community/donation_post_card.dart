@@ -62,6 +62,11 @@ class DonationPostCard extends StatelessWidget {
                     if (post.userId != OneUser.currUserId) {
                       String phoneNumber =
                           await controller.getUserPhoneNumber(post.userId);
+                      // print(
+                      //     'phone : ${phoneNumber}, postID : ${post.id}, donation raised : ${post.donationNeeded}');
+
+                      // //post debug
+                      // print(post);
                       Get.to(() => const DonateNowButtonScreen(), arguments: {
                         'donationNeeded': post.donationNeeded,
                         'donationRaised': post.donationRaised,

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
+import 'package:photo_view/photo_view.dart';
 import '../../controllers/donation/post_card_user.controller.dart';
-import 'donate_now_button.dart';
+import 'admin_donate_now_button.dart';
 
 class AdminDonationPostCard extends StatelessWidget {
   final AdminPostModel post;
@@ -54,9 +55,23 @@ class AdminDonationPostCard extends StatelessWidget {
             const SizedBox(height: 10),
 
             //images
-
-
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: post.imageUrls.map((url) {
+                return GestureDetector(
+                  onTap: () => showEnlargedImage(context, url),
+                  child: Image.network(
+                    url,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              }).toList(),
+            ),
             const SizedBox(height: 10),
+
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,16 +79,28 @@ class AdminDonationPostCard extends StatelessWidget {
                 TextButton.icon(
                   onPressed: () async {
                     // Add your donation logic here
-                    if (post.userId != OneUser.currAdminId) {
+                    if ('0' == OneUser.currAdminId) {
                       String phoneNumber =
                           await controller.getCentralPhoneNumber(post.userId);
-                      Get.to(() => const DonateNowButtonScreen(), arguments: {
-                        'donationNeeded': post.donationNeeded,
-                        'donationRaised': post.donationRaised,
-                        'phoneNumber': phoneNumber,
-                        'userId': post.userId,
-                        'postId': post.id,
-                      });
+                      Get.to(() => const AdminDonateNowButtonScreen(),
+                          arguments: {
+                            'donationNeeded': post.donationNeeded,
+                            'donationRaised': post.donationRaised,
+                            'phoneNumber': phoneNumber,
+                            'userId': post.userId,
+                            'postId': post.id,
+                          });
+                    } else if (OneUser.currUserId != '0') {
+                      String phoneNumber =
+                          await controller.getCentralPhoneNumber(post.userId);
+                      Get.to(() => const AdminDonateNowButtonScreen(),
+                          arguments: {
+                            'donationNeeded': post.donationNeeded,
+                            'donationRaised': post.donationRaised,
+                            'phoneNumber': phoneNumber,
+                            'userId': post.userId,
+                            'postId': post.id,
+                          });
                     } else {
                       Get.snackbar('Error', "You can't donate yourself");
                     }
@@ -100,6 +127,36 @@ class AdminDonationPostCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showEnlargedImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              Center(
+                child: PhotoView(
+                  imageProvider: NetworkImage(imageUrl),
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

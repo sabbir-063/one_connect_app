@@ -31,6 +31,7 @@ class AdminPostModel {
   DateTime get timestamp {
     return DateFormat('dd/MM/yyyy hh:mm a').parse(timeAgo);
   }
+
   // Convert AdminPostModel to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
@@ -63,4 +64,3 @@ class AdminPostModel {
     );
   }
 }
-

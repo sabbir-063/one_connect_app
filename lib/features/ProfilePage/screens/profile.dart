@@ -216,6 +216,7 @@ class ProfileScreen extends StatelessWidget {
         break;
       case 2:
         // Handle logout
+        OneUser.currUserId = '0';
         Get.offAll(() => const LoginScreen());
         break;
     }
