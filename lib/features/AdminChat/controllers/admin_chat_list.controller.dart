@@ -1,19 +1,44 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-
-import '../../../data/static_data/user_list/user_data2.dart';
 import '../../../models/UserModel/user_model.dart';
 
 class AdminChatListController extends GetxController {
   var users = <UserModel>[].obs;
   var filteredUsers = <UserModel>[].obs;
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   void onInit() {
     super.onInit();
-    users.value = UserData2.users;
-    filteredUsers.value = users;
+    fetchAllUsers();
+  }
+
+  Future<void> fetchAllUsers() async {
+    try {
+      final userDocs = await _firestore.collection('Users').get();
+      users.value = userDocs.docs
+          .map((doc) => UserModel(
+                firstName: doc['firstName'],
+                lastName: doc['lastName'],
+                email: doc['email'],
+                phone: doc['phone'],
+                country: doc['country'],
+                state: doc['state'],
+                city: doc['city'],
+                birthday: doc['birthday'],
+                password: doc['password'],
+                donationGiven: doc['donationGiven'],
+                donationReceived: doc['donationReceived'],
+                profileUrl: doc['profileUrl'],
+              ))
+          .toList();
+
+      filteredUsers.value = users;
+    } catch (e) {
+      print("Error fetching users: $e");
+    }
   }
 
   void search(String query) {
@@ -28,4 +53,3 @@ class AdminChatListController extends GetxController {
     }
   }
 }
-

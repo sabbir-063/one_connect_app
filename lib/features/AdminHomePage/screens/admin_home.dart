@@ -16,7 +16,7 @@ class AdminHomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Pending Posts'),
         centerTitle: true,
-        backgroundColor: OneColors.primary,
+        backgroundColor: OneColors.accent,
       ),
       body: Obx(() {
         if (controller.posts.isEmpty) {

@@ -23,6 +23,10 @@ class AdminController extends GetxController {
   var filteredPostsRegular = <AdminPostModel>[].obs;
   var filteredPostsDonation = <AdminPostModel>[].obs;
 
+  // Loading states for posts
+  var isLoadingRegularPosts = true.obs;
+  var isLoadingDonationPosts = true.obs;
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -70,57 +74,39 @@ class AdminController extends GetxController {
   }
 
   Future<void> fetchAdminAllPosts() async {
-    //regular post fetching
+    // Regular post fetching
+    isLoadingRegularPosts.value = true;
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('AdminRegularPosts')
           .get();
 
-      //debug
-      print('regular post asce firbase theke');
-
-      final filterPosts = snapshot.docs.where((doc) {
-        final post = AdminPostModel.fromMap(doc.data());
-        return post.userId != OneUser.currUserId;
-      }).toList();
-
+      final filterPosts = snapshot.docs.toList();
       filteredPostsRegular.value = filterPosts.map((doc) {
         final data = doc.data();
         return AdminPostModel.fromMap(data)..id = doc.id;
       }).toList();
-
-      //debug
-      print('regular post filtered a store hoise. size ${filterPosts.length}');
     } catch (e) {
-      // Handle error
-      print("Error fetching posts: $e");
+      print("Error fetching regular posts: $e");
+    } finally {
+      isLoadingRegularPosts.value = false; // Regular posts loading finished
     }
 
-    //donation posts fetching
+    // Donation posts fetching
+    isLoadingDonationPosts.value = true;
     try {
-      final snapshot =
+      final snapshot2 =
           await FirebaseFirestore.instance.collection('AdminPosts').get();
 
-      //debug
-      print('admin donation post asce firbase theke');
-
-      final filterPosts = snapshot.docs.where((doc) {
-        final post = AdminPostModel.fromMap(doc.data());
-        return post.donationRaised < post.donationNeeded &&
-            post.userId != OneUser.currUserId;
-      }).toList();
-
-      filteredPostsDonation.value = filterPosts.map((doc) {
+      final filterPosts2 = snapshot2.docs.toList();
+      filteredPostsDonation.value = filterPosts2.map((doc) {
         final data = doc.data();
         return AdminPostModel.fromMap(data)..id = doc.id;
       }).toList();
-
-      //debug
-      print(
-          'admin donation post filtered a store hoise. size ${filterPosts.length}');
     } catch (e) {
-      // Handle error
-      print("Error fetching posts: $e");
+      print("Error fetching donation posts: $e");
+    } finally {
+      isLoadingDonationPosts.value = false; // Donation posts loading finished
     }
   }
 }

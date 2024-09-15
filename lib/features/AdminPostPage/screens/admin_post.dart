@@ -16,7 +16,7 @@ class AdminPostScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Donation Posts'),
         centerTitle: true,
-        backgroundColor: OneColors.primary,
+        backgroundColor: OneColors.accent,
       ),
       body: Obx(() {
         if (controller.posts.isEmpty) {
@@ -35,4 +35,3 @@ class AdminPostScreen extends StatelessWidget {
     );
   }
 }
-

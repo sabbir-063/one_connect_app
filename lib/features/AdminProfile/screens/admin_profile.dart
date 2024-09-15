@@ -12,6 +12,7 @@ import '../controllers/admin_profile.controller.dart';
 import 'admin_create_post_donation.dart';
 import 'admin_create_post_regular.dart';
 import 'admin_donation_history.dart';
+import 'admin_graph_statics.dart';
 
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
@@ -54,13 +55,13 @@ class AdminProfileScreen extends StatelessWidget {
           } else {
             return CustomScrollView(
               slivers: [
+                // Wrapping your regular widgets inside SliverToBoxAdapter
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Admin Name and Email
                         Obx(() {
                           return Text(
                             'Admin ${adminController.loggedUser.value.name}',
@@ -81,8 +82,6 @@ class AdminProfileScreen extends StatelessWidget {
                           );
                         }),
                         const SizedBox(height: 20),
-
-                        // Donation Stats
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -146,37 +145,30 @@ class AdminProfileScreen extends StatelessWidget {
                                 }),
                               ],
                             ),
-                            //
                           ],
                         ),
                         const SizedBox(height: 15),
-
-                        Text(
-                            'Special Fund Raised : ${adminController.specialFundRaised} Tk',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-
+                        Obx(() {
+                          return Text(
+                              'Special Fund Raised : ${adminController.specialFundRaised} Tk',
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold));
+                        }),
                         const SizedBox(height: 20),
-
-                        // Buttons for Donation History and Received Organization
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to Donation History
                                   Get.to(() => AdminDonationHistorypage());
                                 },
                                 child: const Text('Donation History'),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ), // Small space between the buttons
+                            const SizedBox(width: 10),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to Received Organization
                                   Get.to(() => AdminReceivedFundpage());
                                 },
                                 child: const Text('Received Fund'),
@@ -184,29 +176,23 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 10),
 
-                        //create posts button
                         Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to regular post
                                   Get.to(
                                       () => const AdminCreatePostRegularPage());
                                 },
                                 child: const Text('Create Regular Post'),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ), // Small space between the buttons
+                            const SizedBox(width: 10),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to donation post
                                   Get.to(() => const AdminCreatePostPage());
                                 },
                                 child: const Text('Create Donation Post'),
@@ -214,92 +200,65 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 10),
 
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.to(() => const AdminGraphStaticsPage());
+                                },
+                                child:
+                                    const Text('OneConnect Analysis (Graph)'),
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 20),
                         const Divider(),
                         const SizedBox(height: 10),
-
-                        // Additional widgets can go here if needed
                         const Text(
                           "Admin posts",
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
+
+                        const SizedBox(height: 20),
+                        // Loading or Donation Posts
+                        Obx(() {
+                          if (adminController.isLoadingDonationPosts.value) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (adminController.filteredPostsDonation.isEmpty) {
+                            return const Text('No donation posts available.');
+                          }
+                          return Column(
+                            children: adminController.filteredPostsDonation
+                                .map(
+                                    (post) => AdminDonationPostCard(post: post))
+                                .toList(),
+                          );
+                        }),
+
                         const SizedBox(height: 10),
 
-                        //Donation posts
-                        if (adminController.filteredPostsDonation.isEmpty)
-                          const SliverFillRemaining(
-                            child: Center(
-                              child: Text(
-                                'No donation posts available.',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                        else
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final post = adminController
-                                    .filteredPostsDonation[index];
-                                return AdminDonationPostCard(post: post);
-                              },
-                              childCount:
-                                  adminController.filteredPostsDonation.length,
-                            ),
-                          ),
-
-                        //Regular posts
-                        if (adminController.filteredPostsRegular.isEmpty)
-                          const SliverFillRemaining(
-                            child: Center(
-                              child: Text(
-                                'No regular posts available.',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                        else
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final post =
-                                    adminController.filteredPostsRegular[index];
-                                return AdminRegularPostCard(post: post);
-                              },
-                              childCount:
-                                  adminController.filteredPostsRegular.length,
-                            ),
-                          ),
-
-                        // Charts
-                        // Obx(() {
-                        //   if (adminController.isLoadingCharts.value) {
-                        //     return const Center(
-                        //       child: CircularProgressIndicator(),
-                        //     );
-                        //   } else {
-                        //     return Column(
-                        //       children: [
-                        //         DonationGivenChart(
-                        //             users:
-                        //                 adminController.dataController.users),
-                        //         DonationReceivedChart(
-                        //             users:
-                        //                 adminController.dataController.users),
-                        //         DonationNeededVsRaisedChart(
-                        //             posts:
-                        //                 adminController.dataController.posts),
-                        //         DaywisePostCountChart(
-                        //             posts:
-                        //                 adminController.dataController.posts),
-                        //       ],
-                        //     );
-                        //   }
-                        // }),
+                        // Loading or Regular Posts
+                        Obx(() {
+                          if (adminController.isLoadingRegularPosts.value) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (adminController.filteredPostsRegular.isEmpty) {
+                            return const Text('No regular posts available.');
+                          }
+                          return Column(
+                            children: adminController.filteredPostsRegular
+                                .map((post) => AdminRegularPostCard(post: post))
+                                .toList(),
+                          );
+                        }),
                       ],
                     ),
                   ),
@@ -315,11 +274,9 @@ class AdminProfileScreen extends StatelessWidget {
   void onSelected(BuildContext context, int item) {
     switch (item) {
       case 0:
-        // Handle notifications
         Get.to(() => AdminNotificationScreen());
         break;
       case 1:
-        // Handle logout
         OneUser.currAdminId = '0';
         Get.offAll(() => const AdminLoginScreen());
         break;

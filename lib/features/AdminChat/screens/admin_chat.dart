@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../models/UserModel/user_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../controllers/admin_chat.controller.dart';
 
 class AdminChatScreen extends StatelessWidget {
@@ -17,6 +18,7 @@ class AdminChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('${user.firstName} ${user.lastName}'),
+        backgroundColor: OneColors.accent,
         centerTitle: true,
       ),
       body: Column(

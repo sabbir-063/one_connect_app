@@ -80,8 +80,9 @@ class AdminDonationPostCard extends StatelessWidget {
                   onPressed: () async {
                     // Add your donation logic here
                     if ('0' == OneUser.currAdminId) {
-                      String phoneNumber =
-                          await controller.getCentralPhoneNumber(post.userId);
+                      print('prothom ta ${OneUser.currAdminId}');
+                      String phoneNumber = await controller
+                          .getCentralPhoneNumber(OneUser.centralFundId);
                       Get.to(() => const AdminDonateNowButtonScreen(),
                           arguments: {
                             'donationNeeded': post.donationNeeded,
@@ -91,8 +92,11 @@ class AdminDonationPostCard extends StatelessWidget {
                             'postId': post.id,
                           });
                     } else if (OneUser.currUserId != '0') {
-                      String phoneNumber =
-                          await controller.getCentralPhoneNumber(post.userId);
+                      print('second ta ${OneUser.currUserId}');
+                      print(OneUser.currUserId);
+                      print(post.userId);
+                      String phoneNumber = await controller
+                          .getCentralPhoneNumber(OneUser.centralFundId);
                       Get.to(() => const AdminDonateNowButtonScreen(),
                           arguments: {
                             'donationNeeded': post.donationNeeded,
