@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
-
+import '../../../models/UserModel/user_model.dart';
 import '../controllers/admin_userlist.controller.dart';
 
 class AdminUserlistScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class AdminUserlistScreen extends StatelessWidget {
         backgroundColor: OneColors.accent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             // Search Bar
@@ -32,7 +32,7 @@ class AdminUserlistScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  hintText: 'Search by name, email, country, or city',
+                  hintText: 'Search by name or email',
                   hintStyle: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.grey,
@@ -40,138 +40,182 @@ class AdminUserlistScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 6.0),
 
-            // User List
+            // User List with Scrollbar
             Expanded(
               child: Obx(() {
                 if (controller.filteredUsers.isEmpty) {
                   return const Center(child: Text('No users found.'));
                 }
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columnSpacing: 20.0,
-                    headingRowColor: WidgetStateColor.resolveWith(
-                        (states) => Colors.blueGrey.shade100),
-                    headingTextStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
-                    columns: const [
-                      DataColumn(label: Text('Rank')),
-                      DataColumn(label: Text('User Name')),
-                      DataColumn(label: Text('Email')),
-                      DataColumn(label: Text('Donations Given')),
-                      DataColumn(label: Text('Donations Received')),
-                      DataColumn(label: Text('Country')),
-                      DataColumn(label: Text('City')),
-                    ],
-                    rows: controller.filteredUsers.map((user) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Text(
-                              (controller.users.indexOf(user) + 1).toString(),
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
+                return Scrollbar(
+                  thumbVisibility: true,
+                  child: ListView.builder(
+                    itemCount: controller.filteredUsers.length,
+                    itemBuilder: (context, index) {
+                      final user = controller.filteredUsers[index];
+                      return Container(
+                        color: index % 2 == 0
+                            ? Colors.blueGrey.shade50
+                            : Colors.white,
+                        child: ListTile(
+                          leading: Text(
+                            '${index + 1}', // Rank
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              '${user.firstName} ${user.lastName}',
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
+                          title: Text(
+                            '${user.firstName} ${user.lastName}', // User name
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue,
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              user.email,
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
+                          subtitle: Text(
+                            'Donations Given: ${user.donationGiven}', // Donation given
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              user.donationGiven.toString(),
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              user.donationReceived.toString(),
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              user.country,
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              user.city,
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
-                        color: WidgetStateColor.resolveWith((states) {
-                          if (controller.users.indexOf(user) % 2 == 0) {
-                            return Colors.blueGrey.shade50;
-                          } else {
-                            return Colors.white;
-                          }
-                        }),
+                          onTap: () => _showUserDetails(context, user),
+                        ),
                       );
-                    }).toList(),
+                    },
                   ),
                 );
               }),
             ),
-
-            // Pagination Controls
-            Obx(() {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: controller.previousPage,
-                  ),
-                  Text(
-                    'Page ${controller.currentPage.value}',
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: controller.nextPage,
-                  ),
-                ],
-              );
-            }),
           ],
         ),
       ),
+    );
+  }
+
+  // Popup for User Details
+  void _showUserDetails(BuildContext context, UserModel user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Profile Picture
+                CircleAvatar(
+                  radius: 80,
+                  backgroundImage: NetworkImage(user.profileUrl.isEmpty
+                      ? 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='
+                      : user.profileUrl),
+                  backgroundColor: Colors.grey.shade200,
+                ),
+                const SizedBox(height: 30),
+
+                // User Info
+                Text(
+                  '${user.firstName} ${user.lastName}',
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  user.email,
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  'Phone: ${user.phone}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  'Country: ${user.country}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  'State: ${user.state}, City: ${user.city}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Birthday: ${user.birthday}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Donation given: ${user.donationGiven}',
+                  style: const TextStyle(
+                      fontSize: 20.0,
+                      color: Color.fromARGB(135, 0, 165, 66),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  'Donation received: ${user.donationReceived}',
+                  style: const TextStyle(
+                      fontSize: 20.0,
+                      color: Color.fromARGB(137, 0, 176, 70),
+                      fontWeight: FontWeight.bold),
+                ),
+
+                // Close button
+                const SizedBox(height: 20),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, // Background color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Close',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

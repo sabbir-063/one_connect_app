@@ -48,7 +48,7 @@ class DonatorListScreen extends StatelessWidget {
                   return const Center(child: Text('No users found.'));
                 }
                 return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   child: DataTable(
                     columnSpacing: 20.0,
                     headingRowColor: WidgetStateColor.resolveWith(
@@ -107,6 +107,8 @@ class DonatorListScreen extends StatelessWidget {
                 );
               }),
             ),
+
+            // const SizedBox(height: 100),
 
             // Pagination Controls
             Obx(() {

@@ -89,22 +89,22 @@ class OneForm extends StatelessWidget {
             ),
             const SizedBox(height: OneSizes.spaceBtwInputField / 2),
 
-            // Remember Me and Forgot password
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Checkbox(value: true, onChanged: (value) {}),
-                    const Text(OneTexts.remember),
-                  ],
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(OneTexts.forget),
-                ),
-              ],
-            ),
+            // // Remember Me and Forgot password
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Row(
+            //       children: [
+            //         Checkbox(value: true, onChanged: (value) {}),
+            //         const Text(OneTexts.remember),
+            //       ],
+            //     ),
+            //     TextButton(
+            //       onPressed: () {},
+            //       child: const Text(OneTexts.forget),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: OneSizes.spaceBtwItems),
 
             // Sign In Button

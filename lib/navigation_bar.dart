@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:one_connect_app/features/DonationPage/screens/donation.dart';
 import 'package:one_connect_app/features/DonatorsPage/screens/donator_list.dart';
-import 'package:one_connect_app/features/MessagePage/screens/messages.dart';
 import 'features/HomePage/screens/HomeScreen/home.dart';
+import 'features/MessagePage/screens/user_chat_screen.dart';
 import 'features/ProfilePage/screens/profile.dart';
 
 class NavigationController extends GetxController {
@@ -13,10 +13,10 @@ class NavigationController extends GetxController {
   final screens = [
     const HomeScreen(),
     DonationPageScreen(),
-    MessagesScreen(),
+    UserChatScreen(),
     DonatorListScreen(),
     // const NotificationScreen(),
-    ProfileScreen(),
+    const ProfileScreen(),
   ];
 
   // void goToProfile() {

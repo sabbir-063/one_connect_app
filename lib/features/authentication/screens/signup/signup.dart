@@ -1,5 +1,5 @@
-import 'package:one_connect_app/features/authentication/screens/login/widgets/login_devider.dart';
-import 'package:one_connect_app/features/authentication/screens/login/widgets/login_footer.dart';
+// import 'package:one_connect_app/features/authentication/screens/login/widgets/login_devider.dart';
+// import 'package:one_connect_app/features/authentication/screens/login/widgets/login_footer.dart';
 import 'package:one_connect_app/utils/constants/sizes.dart';
 import 'package:one_connect_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -27,14 +27,14 @@ class SignUpScreen extends StatelessWidget {
 
               ///Form
               const SignUpForm(),
-              const SizedBox(height: OneSizes.spaceBtwSections),
+              // const SizedBox(height: OneSizes.spaceBtwSections),
 
               ///Divier text
-              const DividerText(dividerText: OneTexts.signUpWith),
-              const SizedBox(height: OneSizes.spaceBtwSections / 2),
+              // const DividerText(dividerText: OneTexts.signUpWith),
+              // const SizedBox(height: OneSizes.spaceBtwSections / 2),
 
               ///Social media
-              const Footer(),
+              // const Footer(),
             ],
           ),
         ),

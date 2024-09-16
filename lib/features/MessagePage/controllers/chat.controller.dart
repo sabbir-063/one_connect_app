@@ -1,40 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../data/static_data/user_list/user_data.dart';
+import 'package:one_connect_app/curr_user.dart';
+import '../../../models/MessageModel/message_model.dart';
 import '../../../models/UserModel/user_model.dart';
 
-class Chat {
-  final UserModel user;
-  final String lastMessage;
-  final DateTime timestamp;
+class UserChatController extends GetxController {
+  var messages = <MessageModel>[].obs;
+  var isLoading = true.obs;
+  TextEditingController messageController = TextEditingController();
 
-  Chat(
-      {required this.user, required this.lastMessage, required this.timestamp});
-}
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var userEmail = ''.obs;
 
-class ChatController extends GetxController {
-  var chats = <Chat>[].obs;
-  var users = UserData.users;
-  var searchResults = <UserModel>[].obs;
+  @override
+  void onInit() {
+    super.onInit();
+    getUserEmail();
+  }
 
-  void startChat(UserModel user) {
-    if (!chats.any((chat) => chat.user.email == user.email)) {
-      chats.add(Chat(
-        user: user,
-        lastMessage: 'Start chatting with ${user.firstName}',
-        timestamp: DateTime.now(),
-      ));
+  Future<void> getUserEmail() async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Users').doc(OneUser.currUserId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        userEmail.value = user.email;
+        fetchMessages();
+      } else {
+        Get.snackbar('Error', 'User not found');
+        isLoading.value = false;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      isLoading.value = false;
     }
   }
 
-  void searchUsers(String query) {
-    if (query.isEmpty) {
-      searchResults.clear();
-    } else {
-      searchResults.value = users.where((user) {
-        final fullName = '${user.firstName} ${user.lastName}'.toLowerCase();
-        return fullName.contains(query.toLowerCase());
-      }).toList();
+  void fetchMessages() {
+    _firestore
+        .collection('chats')
+        .doc(userEmail.value)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        isLoading.value = false; // No messages found
+      } else {
+        messages.value = snapshot.docs.map((doc) {
+          return MessageModel.fromMap(doc.data());
+        }).toList();
+        isLoading.value = false;
+      }
+    });
+  }
+
+  void sendMessage(String sender) {
+    if (messageController.text.isNotEmpty) {
+      _firestore
+          .collection('chats')
+          .doc(userEmail.value)
+          .collection('messages')
+          .add({
+        'sender': sender,
+        'content': messageController.text,
+        'timestamp': DateTime.now(),
+      });
+      messageController.clear();
     }
   }
 }

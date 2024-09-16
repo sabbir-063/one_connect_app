@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_history.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
-import 'package:one_connect_app/features/notification/screens/notification.dart';
+// import 'package:one_connect_app/features/notification/screens/notification.dart';
 
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/edit_profile.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/widgets/user_detailsitems.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 
 import '../../HomePage/screens/community/donation_post_card.dart';
 import '../controllers/profile.controller.dart';
@@ -33,6 +34,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Profile'),
         centerTitle: true,
+        backgroundColor: OneColors.accent,
         automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton<int>(
@@ -43,12 +45,12 @@ class ProfileScreen extends StatelessWidget {
                 value: 0,
                 child: Text('Profile Edit'),
               ),
+              // const PopupMenuItem<int>(
+              //   value: 1,
+              //   child: Text('Notifications'),
+              // ),
               const PopupMenuItem<int>(
                 value: 1,
-                child: Text('Notifications'),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
                 child: Text('Logout'),
               ),
             ],
@@ -210,11 +212,11 @@ class ProfileScreen extends StatelessWidget {
         // Navigate to Edit Profile
         Get.to(() => EditProfileScreen());
         break;
+      // case 1:
+      //   // Handle notifications
+      //   Get.to(() => NotificationScreen());
+      //   break;
       case 1:
-        // Handle notifications
-        Get.to(() => NotificationScreen());
-        break;
-      case 2:
         // Handle logout
         OneUser.currUserId = '0';
         Get.offAll(() => const LoginScreen());

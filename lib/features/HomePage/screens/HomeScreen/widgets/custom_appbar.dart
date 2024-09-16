@@ -38,12 +38,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   // Action for searching a post
                 },
               ),
-              IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.black),
-                onPressed: () {
-                  // Action for notifications
-                },
-              ),
+              // IconButton(
+              //   icon: const Icon(Icons.notifications, color: Colors.black),
+              //   onPressed: () {
+              //     // Action for notifications
+              //   },
+              // ),
             ],
           ),
         ],

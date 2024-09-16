@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 
 import '../controllers/donation.controller.dart';
 
@@ -21,6 +22,9 @@ class DonationPageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: const Text('Donate in Central Fund'),
+        centerTitle: true,
+        backgroundColor: OneColors.accent,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -47,7 +51,7 @@ class DonationPageScreen extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 autoPlayCurve: Curves.fastOutSlowIn,
                 enableInfiniteScroll: true,
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                autoPlayAnimationDuration: const Duration(milliseconds: 700),
                 viewportFraction: 0.8,
               ),
               items: imgList.map((item) {

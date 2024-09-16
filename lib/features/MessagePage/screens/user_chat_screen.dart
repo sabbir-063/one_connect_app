@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../models/UserModel/user_model.dart';
-import '../controllers/admin_chat.controller.dart';
-import '../../../utils/constants/colors.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 
-class AdminChatScreen extends StatelessWidget {
-  final UserModel user;
-  final AdminChatController controller = Get.put(AdminChatController());
+import '../controllers/chat.controller.dart';
 
-  AdminChatScreen({super.key, required this.user}) {
-    controller.initialize(user.email);
-  }
+class UserChatScreen extends StatelessWidget {
+  const UserChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final UserChatController controller = Get.put(UserChatController());
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('${user.firstName} ${user.lastName}'),
+        title: const Text('Chat with Admin'),
         backgroundColor: OneColors.accent,
         centerTitle: true,
       ),
@@ -25,10 +22,12 @@ class AdminChatScreen extends StatelessWidget {
           // Chat messages
           Expanded(
             child: Obx(() {
+              // If loading, show spinner, but once messages are fetched, check if empty
               if (controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
 
+              // If no messages, display a message saying "No messages yet"
               if (controller.messages.isEmpty) {
                 return const Center(child: Text('No messages yet.'));
               }
@@ -38,10 +37,10 @@ class AdminChatScreen extends StatelessWidget {
                 itemCount: controller.messages.length,
                 itemBuilder: (context, index) {
                   var message = controller.messages[index];
-                  bool isAdmin = message.sender == 'admin';
+                  bool isUser = message.sender != 'admin';
                   return Align(
                     alignment:
-                        isAdmin ? Alignment.centerRight : Alignment.centerLeft,
+                        isUser ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 4.0,
@@ -49,7 +48,7 @@ class AdminChatScreen extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
-                        color: isAdmin
+                        color: isUser
                             ? Colors.blue.shade500
                             : Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(20.0),
@@ -93,7 +92,7 @@ class AdminChatScreen extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: () {
-                    controller.sendMessage('admin');
+                    controller.sendMessage('user');
                   },
                 ),
               ],

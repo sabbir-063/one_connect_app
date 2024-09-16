@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'package:one_connect_app/common/styles/spacing_styles.dart';
 import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
 import 'package:one_connect_app/utils/constants/sizes.dart';
-import 'package:one_connect_app/utils/constants/text_strings.dart';
+// import 'package:one_connect_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets/login_devider.dart';
-import 'widgets/login_footer.dart';
+// import 'widgets/login_devider.dart';
+// import 'widgets/login_footer.dart';
 import 'widgets/login_form.dart';
 import 'widgets/login_title.dart';
 
@@ -28,14 +28,14 @@ class LoginScreen extends StatelessWidget {
               OneForm(),
 
               //Divider
-              const DividerText(dividerText: OneTexts.signInWith),
+              // const DividerText(dividerText: OneTexts.signInWith),
 
               const SizedBox(height: OneSizes.spaceBtwSections / 2),
 
               //Footer
-              const Footer(),
+              // const Footer(),
 
-              const SizedBox(height: OneSizes.spaceBtwSections),
+              // const SizedBox(height: OneSizes.spaceBtwSections),
 
               GestureDetector(
                 onTap: () {
