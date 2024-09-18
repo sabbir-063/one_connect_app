@@ -49,7 +49,7 @@ class AdminDonationHistoryController extends GetxController {
             String lastName = userDoc.data()?['lastName'] ?? '';
             receiverNames[donation.receiverId] = '$firstName $lastName';
           } else {
-            receiverNames[donation.receiverId] = 'Central Fund Regular';
+            receiverNames[donation.receiverId] = 'User not found';
           }
         } catch (e) {
           receiverNames[donation.receiverId] = 'Error retrieving user name';

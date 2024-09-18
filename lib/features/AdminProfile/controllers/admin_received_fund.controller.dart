@@ -10,27 +10,39 @@ class AdminReceivedFundController extends GetxController {
   var startDate = DateTime.now().subtract(const Duration(days: 30)).obs;
   var endDate = DateTime.now().obs;
 
+  var isLoading = true.obs;
   // Map to store the receiver's full name
   var receiverNames = <String, String>{}.obs;
+  var fundType = <String, String>{}.obs;
+
+  void init() {
+    super.onInit();
+    fetchData();
+  }
 
   Future<void> fetchData() async {
     final firestore = FirebaseFirestore.instance;
-
+    isLoading.value = true;
     try {
       final snapshot = await firestore
           .collection('DonationTracker')
           .where('receiverId', isEqualTo: OneUser.centralFundId)
           .get();
 
-      final fetchedDonations = snapshot.docs.map((doc) {
-        return DonationTracker.fromMap(doc.data());
+      final fetchedDonations = snapshot.docs.where((doc) {
+        return true;
       }).toList();
 
-      donations.value = fetchedDonations;
+      donations.value = fetchedDonations.map((doc) {
+        return DonationTracker.fromMap(doc.data())..id = doc.id;
+      }).toList();
+
       await _fetchReceiverNames();
       filterDonations();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch donation history: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -38,21 +50,29 @@ class AdminReceivedFundController extends GetxController {
     final firestore = FirebaseFirestore.instance;
 
     for (var donation in donations) {
-      if (!receiverNames.containsKey(donation.donatorId)) {
-        try {
-          final userDoc =
-              await firestore.collection('Users').doc(donation.donatorId).get();
-          if (userDoc.exists) {
-            String firstName = userDoc.data()?['firstName'] ?? '';
-            String lastName = userDoc.data()?['lastName'] ?? '';
-            receiverNames[donation.receiverId] = '$firstName $lastName';
-          } else {
-            receiverNames[donation.receiverId] = 'Central Fund Regular';
-          }
-        } catch (e) {
-          receiverNames[donation.receiverId] = 'Error retrieving user name';
+      // if (!receiverNames.containsKey(donation.donatorId)) {
+      try {
+        if (donation.postId == '0') {
+          fundType[donation.id] = 'Central Fund';
+        } else {
+          fundType[donation.id] = 'Special Fund';
         }
+
+        final userDoc =
+            await firestore.collection('Users').doc(donation.donatorId).get();
+        if (userDoc.exists) {
+          String firstName = userDoc.data()?['firstName'] ?? '';
+          String lastName = userDoc.data()?['lastName'] ?? '';
+          receiverNames[donation.donatorId] = '$firstName $lastName';
+
+          print(receiverNames[donation.donatorId]);
+        } else {
+          receiverNames[donation.donatorId] = 'User not found';
+        }
+      } catch (e) {
+        receiverNames[donation.donatorId] = 'Error retrieving user name';
       }
+      // }
     }
   }
 

@@ -1,4 +1,5 @@
 class DonationTracker {
+  String id;
   final String donatorId;
   final String receiverId;
   final int amount;
@@ -8,6 +9,7 @@ class DonationTracker {
   final String postId;
 
   DonationTracker({
+    this.id = '',
     required this.donatorId,
     required this.receiverId,
     required this.amount,

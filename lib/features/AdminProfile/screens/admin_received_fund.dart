@@ -16,7 +16,7 @@ class AdminReceivedFundpage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Donation History'),
+        title: const Text('Admin Received Fund'),
         centerTitle: true,
       ),
       body: Padding(
@@ -24,6 +24,9 @@ class AdminReceivedFundpage extends StatelessWidget {
         child: Column(
           children: [
             Obx(() {
+              // if (controller.isLoading.value == true) {
+              //   return const Center(child: CircularProgressIndicator());
+              // }
               return Row(
                 children: [
                   Expanded(
@@ -81,7 +84,7 @@ class AdminReceivedFundpage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       var donation = controller.filteredDonations[index];
                       var receiverName =
-                          controller.getReceiverFullName(donation.receiverId);
+                          controller.getReceiverFullName(donation.donatorId);
                       return Card(
                         elevation: 4.0,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -95,7 +98,7 @@ class AdminReceivedFundpage extends StatelessWidget {
                           title:
                               Text('$receiverName - ${donation.donationMedia}'),
                           subtitle: Text(
-                              'Amount: ${donation.amount.toStringAsFixed(2)} Taka'),
+                              'Amount: ${donation.amount.toStringAsFixed(2)} Taka , ${controller.fundType[donation.id]}'),
                           trailing:
                               Text(DateFormat.yMMMd().format(donation.time)),
                         ),

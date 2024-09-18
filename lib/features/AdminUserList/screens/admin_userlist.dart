@@ -173,7 +173,7 @@ class AdminUserlistScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Donation given: ${user.donationGiven}',
+                  'Donation given: ${user.donationGiven} Taka',
                   style: const TextStyle(
                       fontSize: 20.0,
                       color: Color.fromARGB(135, 0, 165, 66),
@@ -182,7 +182,7 @@ class AdminUserlistScreen extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 Text(
-                  'Donation received: ${user.donationReceived}',
+                  'Donation received: ${user.donationReceived} Taka',
                   style: const TextStyle(
                       fontSize: 20.0,
                       color: Color.fromARGB(137, 0, 176, 70),

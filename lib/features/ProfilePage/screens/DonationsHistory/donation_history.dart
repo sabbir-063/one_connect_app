@@ -81,7 +81,7 @@ class DonationHistoryPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       var donation = controller.filteredDonations[index];
                       var receiverName =
-                          controller.getReceiverFullName(donation.receiverId);
+                          controller.getReceiverFullName(donation.id);
                       return Card(
                         elevation: 4.0,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
