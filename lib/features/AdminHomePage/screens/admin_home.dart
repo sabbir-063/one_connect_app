@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
 import 'package:photo_view/photo_view.dart';
 
+import '../../../utils/helpers/helper_functions.dart';
 import '../controllers/admin_home.controller.dart';
 
 class AdminHomeScreen extends StatelessWidget {
@@ -35,15 +36,80 @@ class AdminHomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: post.profilePicUrl.isEmpty
-                            ? const NetworkImage(
-                                'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=')
-                            : NetworkImage(post.profilePicUrl),
-                      ),
-                      title: Text(post.profileName),
-                      subtitle: Text(post.timeAgo),
+                    FutureBuilder<String>(
+                      future: controller.getUserFullName(
+                          post.userId), // Future to get the full name
+                      builder: (context, nameSnapshot) {
+                        return FutureBuilder<bool>(
+                          future: OneHelperFunctions.isProfilePicEmpty(post
+                              .userId), // Future to check if profilePic is empty
+                          builder: (context, isEmptySnapshot) {
+                            if (nameSnapshot.connectionState ==
+                                    ConnectionState.waiting ||
+                                isEmptySnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                              return const ListTile(
+                                title: Text('Loading...'),
+                                subtitle: Text('Fetching user details...'),
+                              );
+                            } else if (nameSnapshot.hasError ||
+                                isEmptySnapshot.hasError) {
+                              return const ListTile(
+                                title: Text('Error'),
+                                subtitle: Text('Failed to fetch user details'),
+                              );
+                            } else {
+                              // Add another FutureBuilder for fetching the profile picture URL
+                              return FutureBuilder<String>(
+                                future: OneHelperFunctions.getProfilePicUrl(post
+                                    .userId), // Future to get profile picture URL
+                                builder: (context, profilePicSnapshot) {
+                                  if (profilePicSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const ListTile(
+                                      title: Text('Loading...'),
+                                      subtitle:
+                                          Text('Fetching profile picture...'),
+                                      leading: CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/loading/loading_spinner.gif'), // Loading placeholder
+                                      ),
+                                    );
+                                  } else if (profilePicSnapshot.hasError) {
+                                    return const ListTile(
+                                      title: Text('Error'),
+                                      subtitle: Text(
+                                          'Failed to fetch profile picture'),
+                                      leading: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=', // Default image in case of error
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    final bool isEmpty =
+                                        isEmptySnapshot.data ?? true;
+                                    final String profilePicUrl =
+                                        profilePicSnapshot.data ?? '';
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: isEmpty
+                                            ? const NetworkImage(
+                                                'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=') // Default image
+                                            : NetworkImage(
+                                                profilePicUrl), // Profile picture URL
+                                      ),
+                                      title: Text(
+                                          nameSnapshot.data ?? 'Unknown User'),
+                                      subtitle: Text(post.timeAgo),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -90,10 +156,7 @@ class AdminHomeScreen extends StatelessWidget {
                           child: const Text('Accept'),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            // print('post id when reject post ${post.id}');
-                            controller.rejectPost(post.id);
-                          },
+                          onPressed: () => controller.rejectPost(post.id),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                             padding: const EdgeInsets.symmetric(

@@ -22,4 +22,22 @@ class PostCardController extends GetxController {
       return '';
     }
   }
+    Future<String> getUserFullName(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        String nAME = '${user.firstName} ${user.lastName}';
+        return nAME;
+      } else {
+        Get.snackbar('Error', 'User not found');
+        return '';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      return '';
+    }
+  }
 }

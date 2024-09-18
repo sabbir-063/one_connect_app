@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../../../models/UserModel/user_model.dart';
 
 class DonationPostsController extends GetxController {
   var posts = <AdminPostModel>[].obs;
@@ -37,6 +38,25 @@ class DonationPostsController extends GetxController {
 
   void updatePostPage() {
     fetchPosts();
+  }
+
+  Future<String> getUserFullName(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        String nAME = '${user.firstName} ${user.lastName}';
+        return nAME;
+      } else {
+        Get.snackbar('Error', 'User not found');
+        return '';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      return '';
+    }
   }
 
   // void fetchPosts() {

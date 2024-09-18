@@ -1,9 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OneHelperFunctions {
+  static Future<bool> isProfilePicEmpty(String userId) async {
+    try {
+      // Access the Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Get the user's document from the 'Users' collection
+      DocumentSnapshot userDoc =
+          await firestore.collection('Users').doc(userId).get();
+
+      if (userDoc.exists) {
+        // Check if the 'profilePic' field exists and is not empty
+        String profilePic = userDoc['profileUrl'];
+        if (profilePic.isNotEmpty) {
+          return false; // profilePic is not empty
+        }
+      }
+      return true; // profilePic is empty or doesn't exist
+    } catch (e) {
+      // Handle any errors that occur during the Firestore request
+      print('Error checking profile picture: $e');
+      return true; // In case of an error, assume profilePic is empty
+    }
+  }
+
+  static Future<String> getProfilePicUrl(String userId) async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+
+    try {
+      String filePath = 'profile_pictures/$userId/picture.png';
+      String downloadUrl = await storage.ref(filePath).getDownloadURL();
+      print(downloadUrl);
+      return downloadUrl;
+    } catch (e) {
+      return '';
+    }
+  }
+
   static Color? getColor(String value) {
     if (value == 'Green') {
       return Colors.green;

@@ -36,7 +36,7 @@ class ProfileController extends GetxController {
   Future<void> fetchPosts() async {
     // isLoading(true);
     try {
-      final snapshot = await FirebaseFirestore.instance
+      final snapshot = await _firestore
           .collection('Posts')
           .where('postAccepted', isEqualTo: true)
           .get();
@@ -104,6 +104,25 @@ class ProfileController extends GetxController {
       controller2.updateUserProfile();
     } catch (e) {
       // print("Error updating profile picture: $e");
+    }
+  }
+
+    Future<String> getUserFullName(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        String nAME = '${user.firstName} ${user.lastName}';
+        return nAME;
+      } else {
+        Get.snackbar('Error', 'User not found');
+        return '';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      return '';
     }
   }
 }

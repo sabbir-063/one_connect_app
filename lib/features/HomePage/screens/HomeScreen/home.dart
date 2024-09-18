@@ -97,14 +97,11 @@ class HomeScreen extends StatelessWidget {
                     final post = controller.filteredPosts[index];
                     if (controller.selectedCategoryIndex.value == 0) {
                       return DonationPostCard(post: post);
-                      // ignore: curly_braces_in_flow_control_structures
-                    } else if (controller.selectedCategoryIndex.value == 1)
-                      // ignore: curly_braces_in_flow_control_structures
+                    } else if (controller.selectedCategoryIndex.value == 1) {
                       return AdminRegularPostCard(post: post);
-                    // ignore: curly_braces_in_flow_control_structures
-                    else
-                      // ignore: curly_braces_in_flow_control_structures
+                    } else {
                       return AdminDonationPostCard(post: post);
+                    }
                   },
                   childCount: controller.filteredPosts.length,
                 ),

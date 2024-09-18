@@ -14,6 +14,7 @@ class DonateNowController extends GetxController {
   var userId = ''.obs;
   var currUser = OneUser.currUserId;
   var postId = ''.obs;
+  var isAnonymously = false.obs;
   final amountController = TextEditingController();
 
   void updateSelectedMethod(String? method) {
@@ -88,6 +89,7 @@ class DonateNowController extends GetxController {
       time: DateTime.now(),
       donationMedia: selectedMethod.value,
       postId: postId.value,
+      isAnonymus: isAnonymously.value,
     );
     await firestore.collection('DonationTracker').add(newDonation.toMap());
 

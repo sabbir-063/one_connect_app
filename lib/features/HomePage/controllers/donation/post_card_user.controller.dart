@@ -5,6 +5,9 @@ import '../../../../models/UserModel/user_model.dart';
 
 class PostCardUserController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var profilePicUrl = ''.obs;
+
+  
 
   Future<String> getUserPhoneNumber(String userId) async {
     try {
@@ -25,7 +28,6 @@ class PostCardUserController extends GetxController {
   }
 
   Future<String> getCentralPhoneNumber(String userID) async {
-
     try {
       // Access the document of the given userID in CentralFund collection
       DocumentSnapshot userDoc =
@@ -44,6 +46,25 @@ class PostCardUserController extends GetxController {
       // Handle error
       print('Error fetching user phone number: $e');
       return 'null';
+    }
+  }
+
+  Future<String> getUserFullName(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        String nAME = '${user.firstName} ${user.lastName}';
+        return nAME;
+      } else {
+        Get.snackbar('Error', 'User not found');
+        return '';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      return '';
     }
   }
 }

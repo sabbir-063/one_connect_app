@@ -113,6 +113,19 @@ class DonateNowButtonScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
 
+              // Anonymous Donation Checkbox
+              Obx(
+                () => CheckboxListTile(
+                  title: const Text('Donate Anonymously'),
+                  value: controller.isAnonymously.value,
+                  onChanged: (bool? value) {
+                    controller.isAnonymously.value = value?? false ;
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 16.0),
+
               // Donate Button
               ElevatedButton(
                 onPressed: () {

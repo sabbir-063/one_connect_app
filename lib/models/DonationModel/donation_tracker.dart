@@ -7,6 +7,7 @@ class DonationTracker {
   final DateTime time;
   final String donationMedia; // e.g., 'Bkash', 'Nogod', etc.
   final String postId;
+  final bool isAnonymus;
 
   DonationTracker({
     this.id = '',
@@ -17,6 +18,7 @@ class DonationTracker {
     required this.time,
     required this.donationMedia,
     required this.postId,
+    this.isAnonymus = false,
   });
 
   // Convert DonationTracker to a map for Firestore
@@ -29,6 +31,7 @@ class DonationTracker {
       'time': time.toIso8601String(),
       'donationMedia': donationMedia,
       'postId': postId,
+      'isAnonymus': isAnonymus,
     };
   }
 
@@ -42,6 +45,7 @@ class DonationTracker {
       time: DateTime.parse(map['time']),
       donationMedia: map['donationMedia'],
       postId: map['postId'],
+      isAnonymus: map['isAnonymus'] ?? false,
     );
   }
 }

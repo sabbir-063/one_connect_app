@@ -70,6 +70,8 @@ class AdminDonationHistoryController extends GetxController {
       return donation.time.isAfter(start) &&
           donation.time.isBefore(end.add(const Duration(days: 1)));
     }).toList();
+
+    filteredDonations.sort((a, b) => b.time.compareTo(a.time));
   }
 
   void changeStartDate(DateTime date) {

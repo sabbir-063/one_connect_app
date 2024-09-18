@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../../../models/UserModel/user_model.dart';
 import '../../AdminPostPage/controllers/donation_posts.controller.dart';
 
 class AdminHomeController extends GetxController {
@@ -42,5 +43,24 @@ class AdminHomeController extends GetxController {
       'postAccepted': false,
       'adminChecked': true,
     });
+  }
+
+  Future<String> getUserFullName(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        String nAME = '${user.firstName} ${user.lastName}';
+        return nAME;
+      } else {
+        Get.snackbar('Error', 'User not found');
+        return '';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+      return '';
+    }
   }
 }
