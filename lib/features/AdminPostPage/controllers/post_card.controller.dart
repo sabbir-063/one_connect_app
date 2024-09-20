@@ -32,7 +32,7 @@ class PostCardController extends GetxController {
         String nAME = '${user.firstName} ${user.lastName}';
         return nAME;
       } else {
-        Get.snackbar('Error', 'User not found');
+        // Get.snackbar('Error', 'User not found');
         return '';
       }
     } catch (e) {

@@ -1,54 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:one_connect_app/models/UserModel/user_model.dart';
-
+import 'package:get/get.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 import '../../../../models/DonationModel/donation_tracker.dart';
+import '../../controllers/donation/transaction.controller.dart';
 
 class TransactionHistoryPage extends StatelessWidget {
   final String postID;
 
-  TransactionHistoryPage({super.key, required this.postID});
-
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  Future<List<DonationTracker>> fetchDonations() async {
-    final snapshot = await _firestore
-        .collection('DonationTracker')
-        .where('postId', isEqualTo: postID)
-        .get();
-
-    print(postID);
-
-    return snapshot.docs.map((doc) {
-      return DonationTracker.fromMap(doc.data())..id = doc.id;
-    }).toList();
-  }
-
-  Future<String> getUserFullName(String userId) async {
-    try {
-      final userDoc = await _firestore.collection('Users').doc(userId).get();
-      if (userDoc.exists) {
-        UserModel user =
-            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-        return '${user.firstName} ${user.lastName}';
-      } else {
-        return 'OneConnect Admin';
-      }
-    } catch (e) {
-      return 'Error';
-    }
-  }
+  const TransactionHistoryPage({super.key, required this.postID});
 
   @override
   Widget build(BuildContext context) {
+    // Initialize the controller
+    final TransactionController controller =
+        Get.put(TransactionController(postID));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transaction History'),
         centerTitle: true,
-        backgroundColor: Colors.teal, // Customize as per your app theme
+        backgroundColor: OneColors.accent,
       ),
       body: FutureBuilder<List<DonationTracker>>(
-        future: fetchDonations(), // Replace with your donation fetch method
+        future: controller
+            .fetchDonations(), // Fetch donations through the controller
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -64,12 +39,11 @@ class TransactionHistoryPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final donation = donations[index];
 
-                // Adding a Card for each donation
                 return FutureBuilder<String>(
                   future: donation.isAnonymus
                       ? Future.value(donation.donatorId)
-                      : getUserFullName(
-                          donation.donatorId), // Fetching user's full name
+                      : controller.getUserFullName(donation
+                          .donatorId), // Fetch user name from controller
                   builder: (context, userSnapshot) {
                     if (userSnapshot.connectionState ==
                         ConnectionState.waiting) {
@@ -84,16 +58,15 @@ class TransactionHistoryPage extends StatelessWidget {
                     } else {
                       return Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(10), // Rounded corners
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         margin: const EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 10), // Space between cards
-                        elevation: 5, // Shadow effect
+                          vertical: 10.0,
+                          horizontal: 10,
+                        ),
+                        elevation: 5,
                         child: Padding(
-                          padding: const EdgeInsets.all(
-                              16.0), // Padding inside the card
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -104,8 +77,7 @@ class TransactionHistoryPage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(
-                                  height: 8), // Spacing between elements
+                              const SizedBox(height: 8),
                               Text(
                                 'Amount: ${donation.amount} Tk',
                                 style: const TextStyle(
@@ -113,8 +85,7 @@ class TransactionHistoryPage extends StatelessWidget {
                                   color: Colors.black87,
                                 ),
                               ),
-                              const SizedBox(
-                                  height: 4), // Spacing between elements
+                              const SizedBox(height: 4),
                               Text(
                                 'Media: ${donation.donationMedia}',
                                 style: const TextStyle(
@@ -122,8 +93,7 @@ class TransactionHistoryPage extends StatelessWidget {
                                   color: Colors.black54,
                                 ),
                               ),
-                              const SizedBox(
-                                  height: 4), // Spacing between elements
+                              const SizedBox(height: 4),
                               Text(
                                 'Time: ${donation.time}',
                                 style: const TextStyle(

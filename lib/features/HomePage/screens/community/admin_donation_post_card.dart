@@ -25,7 +25,7 @@ class AdminDonationPostCard extends StatelessWidget {
               leading: CircleAvatar(
                 backgroundImage: post.profilePicUrl.isEmpty
                     ? const NetworkImage(
-                        'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=')
+                        'https://i.ibb.co.com/kXy1Bnb/One-Connect.png')
                     : NetworkImage(post.profilePicUrl),
               ),
               title: Text(post.profileName),
@@ -80,7 +80,7 @@ class AdminDonationPostCard extends StatelessWidget {
                   onPressed: () async {
                     // Add your donation logic here
                     if ('0' == OneUser.currAdminId) {
-                      print('prothom ta ${OneUser.currAdminId}');
+                      // print('prothom ta ${OneUser.currAdminId}');
                       String phoneNumber = await controller
                           .getCentralPhoneNumber(OneUser.centralFundId);
                       Get.to(() => const AdminDonateNowButtonScreen(),
@@ -92,9 +92,9 @@ class AdminDonationPostCard extends StatelessWidget {
                             'postId': post.id,
                           });
                     } else if (OneUser.currUserId != '0') {
-                      print('second ta ${OneUser.currUserId}');
-                      print(OneUser.currUserId);
-                      print(post.userId);
+                      // print('second ta ${OneUser.currUserId}');
+                      // print(OneUser.currUserId);
+                      // print(post.userId);
                       String phoneNumber = await controller
                           .getCentralPhoneNumber(OneUser.centralFundId);
                       Get.to(() => const AdminDonateNowButtonScreen(),
