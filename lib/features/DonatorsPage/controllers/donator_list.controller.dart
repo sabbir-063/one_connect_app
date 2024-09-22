@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-
 import '../../../models/UserModel/user_model.dart';
 
 class DonatorListController extends GetxController {
   var users = <UserModel>[].obs;
   var filteredUsers = <UserModel>[].obs;
-  var currentPage = 1.obs;
-  var usersPerPage = 10;
   var searchText = ''.obs;
 
   @override
@@ -26,15 +23,10 @@ class DonatorListController extends GetxController {
     }
 
     users.sort((a, b) => b.donationGiven.compareTo(a.donationGiven));
-    assignRanks();
-    applySearchAndPagination();
+    applySearch();
   }
 
-  void assignRanks() {
-    for (int i = 0; i < users.length; i++) {}
-  }
-
-  void applySearchAndPagination() {
+  void applySearch() {
     List<UserModel> allUsers = users;
 
     if (searchText.isNotEmpty) {
@@ -53,29 +45,11 @@ class DonatorListController extends GetxController {
       }).toList();
     }
 
-    filteredUsers.value = allUsers
-        .skip((currentPage.value - 1) * usersPerPage)
-        .take(usersPerPage)
-        .toList();
+    filteredUsers.value = allUsers;
   }
 
   void search(String query) {
     searchText.value = query;
-    currentPage.value = 1;
-    applySearchAndPagination();
-  }
-
-  void nextPage() {
-    if (currentPage.value * usersPerPage < users.length) {
-      currentPage.value++;
-      applySearchAndPagination();
-    }
-  }
-
-  void previousPage() {
-    if (currentPage.value > 1) {
-      currentPage.value--;
-      applySearchAndPagination();
-    }
+    applySearch();
   }
 }

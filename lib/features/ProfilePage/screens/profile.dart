@@ -99,6 +99,13 @@ class ProfileScreen extends StatelessWidget {
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 5),
+
+                      Text(
+                        'User ID :  ${userController.loggedUser.value.userNameAuto}',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 5),
                       Text(
                         userController.loggedUser.value.phone,
                         style:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
 
@@ -44,14 +45,14 @@ class UserChatScreen extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 4.0,
-                        horizontal: 8.0,
+                        horizontal: 18.0,
                       ),
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
                         color: isUser
                             ? Colors.blue.shade500
                             : Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,9 +61,9 @@ class UserChatScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             '${message.timestamp.hour}:${message.timestamp.minute}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
-                              color: Colors.grey,
+                              color: isUser ? Colors.white : Colors.black,
                             ),
                           ),
                         ],
@@ -82,6 +83,9 @@ class UserChatScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: controller.messageController,
+                    minLines: 1,
+                    maxLines: null,
+                    textInputAction: TextInputAction.newline,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Type a message',

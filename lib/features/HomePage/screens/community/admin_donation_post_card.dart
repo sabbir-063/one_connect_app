@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
 import 'package:photo_view/photo_view.dart';
 import '../../controllers/donation/post_card_user.controller.dart';
 import 'admin_donate_now_button.dart';
+import 'transaction_history_page.dart';
 
 class AdminDonationPostCard extends StatelessWidget {
   final AdminPostModel post;
@@ -32,24 +34,50 @@ class AdminDonationPostCard extends StatelessWidget {
               subtitle: Text(post.timeAgo),
             ),
             const SizedBox(height: 10),
-            Text(
-              post.postMessage,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Donation Needed: ${post.donationNeeded} Tk',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+              child: GestureDetector(
+                onLongPress: () {
+                  Clipboard.setData(ClipboardData(
+                      text: post.postMessage)); // Copy text to clipboard
+                  HapticFeedback.vibrate();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Post message copied!'),
+                    ),
+                  );
+                },
+                child: Text(
+                  post.postMessage,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 16),
+                ),
               ),
             ),
-            Text(
-              'Donation Raised: ${post.donationRaised} Tk',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'Donation needed: ${post.donationNeeded} Tk',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(() => TransactionHistoryPage(postID: post.id));
+              },
+              child: Text(
+                'Donation Raised: ${post.donationRaised} Tk',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
               ),
             ),
             const SizedBox(height: 10),

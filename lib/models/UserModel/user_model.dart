@@ -11,10 +11,12 @@ class UserModel {
   int donationGiven;
   int donationReceived;
   String profileUrl;
+  String userNameAuto;
 
   UserModel({
     required this.firstName,
     required this.lastName,
+    this.userNameAuto = '',
     required this.email,
     required this.phone,
     required this.country,
@@ -24,7 +26,8 @@ class UserModel {
     required this.password,
     this.donationGiven = 0,
     this.donationReceived = 0,
-    this.profileUrl = '', // Default to an empty string if no profile URL is provided
+    this.profileUrl =
+        '', // Default to an empty string if no profile URL is provided
   });
 
   // Convert UserModel to a map for Firestore
@@ -32,6 +35,7 @@ class UserModel {
     return {
       'firstName': firstName,
       'lastName': lastName,
+      'userNameAuto': userNameAuto,
       'email': email,
       'phone': phone,
       'country': country,
@@ -50,6 +54,7 @@ class UserModel {
     return UserModel(
       firstName: map['firstName'],
       lastName: map['lastName'],
+      userNameAuto: map['userNameAuto'],
       email: map['email'],
       phone: map['phone'],
       country: map['country'],

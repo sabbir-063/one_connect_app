@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/models/CreatePostModel/admin_post_model.dart';
@@ -95,17 +96,32 @@ class DonationPostCard extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
-            Text(
-              post.postMessage,
-              style: const TextStyle(fontSize: 16),
+
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+              child: GestureDetector(
+                onLongPress: () {
+                  Clipboard.setData(ClipboardData(
+                      text: post.postMessage)); // Copy text to clipboard
+                  HapticFeedback.vibrate();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Post message copied!'),
+                    ),
+                  );
+                },
+                child: Text(
+                  post.postMessage,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             // const Divider(),
-            TextButton(
-              onPressed: () {
-                // Navigate to the transaction history page for this post
-                // Get.to(() => TransactionHistoryPage(postId: post.id));
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Text(
                 'Donation needed: ${post.donationNeeded} Tk',
                 style: const TextStyle(
@@ -118,8 +134,6 @@ class DonationPostCard extends StatelessWidget {
             // const SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                // Navigate to the transaction history page for this post
-                print('post id ${post.id}');
                 Get.to(() => TransactionHistoryPage(postID: post.id));
               },
               child: Text(

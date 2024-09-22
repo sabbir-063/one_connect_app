@@ -83,13 +83,13 @@ class DonateNowController extends GetxController {
 
     //donation tracker collection add a row
     DonationTracker newDonation = DonationTracker(
-      donatorId: OneUser.centralFundId,
+      donatorId: OneUser.currAdminId,
       receiverId: userId.value,
       amount: donationAmount,
       type: 'Admin given', // Adjust as necessary
       time: DateTime.now(),
       donationMedia: selectedMethod.value,
-      postId: '1',
+      postId: postId.value,
     );
     await firestore.collection('DonationTracker').add(newDonation.toMap());
 

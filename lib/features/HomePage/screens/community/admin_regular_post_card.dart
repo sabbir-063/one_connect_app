@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -29,9 +30,26 @@ class AdminRegularPostCard extends StatelessWidget {
               subtitle: Text(post.timeAgo),
             ),
             const SizedBox(height: 10),
-            Text(
-              post.postMessage,
-              style: const TextStyle(fontSize: 16),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+              child: GestureDetector(
+                onLongPress: () {
+                  Clipboard.setData(ClipboardData(
+                      text: post.postMessage)); // Copy text to clipboard
+                  HapticFeedback.vibrate();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Post message copied!'),
+                    ),
+                  );
+                },
+                child: Text(
+                  post.postMessage,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
 

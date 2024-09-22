@@ -12,7 +12,7 @@ class DonatorListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Users List'),
+        title: const Text('Top Donator List'),
         centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: OneColors.accent,
@@ -107,29 +107,6 @@ class DonatorListScreen extends StatelessWidget {
                 );
               }),
             ),
-
-            // const SizedBox(height: 100),
-
-            // Pagination Controls
-            Obx(() {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: userController.previousPage,
-                  ),
-                  Text(
-                    'Page ${userController.currentPage.value}',
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: userController.nextPage,
-                  ),
-                ],
-              );
-            }),
           ],
         ),
       ),
@@ -145,7 +122,7 @@ class DonatorListScreen extends StatelessWidget {
     } else if (rank <= 8) {
       return 'Bronze';
     }
-    return ''; // No badge for other ranks
+    return 'Newbie'; // No badge for other ranks
   }
 
   // Helper function to build badge widget
@@ -156,6 +133,8 @@ class DonatorListScreen extends StatelessWidget {
       badgeColor = Colors.grey;
     } else if (badge == 'Bronze') {
       badgeColor = Colors.orange;
+    } else if (badge == 'Newbie') {
+      badgeColor = Colors.greenAccent;
     }
 
     return Container(

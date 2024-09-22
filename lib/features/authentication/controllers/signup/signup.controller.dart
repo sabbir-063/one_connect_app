@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
 import '../../../../../models/UserModel/user_model.dart';
+import '../../../../curr_user.dart';
 
 class SignUpController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -38,9 +39,37 @@ class SignUpController extends GetxController {
           password: passwordController.text,
         );
 
+        int currValue = 0;
+
+        final centralFundDoc = FirebaseFirestore.instance
+            .collection('CentralFund')
+            .doc(OneUser.centralFundId);
+
+        final centralFundSnapshot = await centralFundDoc.get();
+
+        if (centralFundSnapshot.exists) {
+          currValue = centralFundSnapshot.data()?['user_count'] ?? 0;
+          await centralFundDoc.update({
+            'user_count': currValue + 1,
+          });
+        }
+
+        currValue++;
+        int len = currValue.toString().length;
+        int zeros = 8 - len;
+
+        String userName = 'user_';
+
+        for (int i = 0; i < zeros; i++) {
+          userName += '0';
+        }
+
+        userName += currValue.toString();
+
         UserModel newUser = UserModel(
           firstName: firstNameController.text,
           lastName: lastNameController.text,
+          userNameAuto: userName,
           email: emailController.text,
           phone: phoneController.text,
           country: country,
@@ -123,7 +152,8 @@ class SignUpController extends GetxController {
       ),
       isDismissible: true,
       showProgressIndicator: true,
-      progressIndicatorValueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+      progressIndicatorValueColor:
+          const AlwaysStoppedAnimation<Color>(Colors.white),
       progressIndicatorBackgroundColor: Colors.grey,
     );
   }

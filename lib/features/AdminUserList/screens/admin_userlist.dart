@@ -54,13 +54,14 @@ class AdminUserlistScreen extends StatelessWidget {
                     itemCount: controller.filteredUsers.length,
                     itemBuilder: (context, index) {
                       final user = controller.filteredUsers[index];
+                      int rank = controller.users.indexOf(user) + 1;
                       return Container(
                         color: index % 2 == 0
                             ? Colors.blueGrey.shade50
                             : Colors.white,
                         child: ListTile(
                           leading: Text(
-                            '${index + 1}', // Rank
+                            '$rank', // Rank
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
@@ -121,6 +122,16 @@ class AdminUserlistScreen extends StatelessWidget {
                 // User Info
                 Text(
                   '${user.firstName} ${user.lastName}',
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                Text(
+                  'user_id : ${user.userNameAuto}',
                   style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
