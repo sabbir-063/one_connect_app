@@ -1,6 +1,5 @@
 // notification_model.dart
 
-
 class NotificationModel {
   String id;
   String title;
@@ -9,7 +8,7 @@ class NotificationModel {
   bool isRead;
 
   NotificationModel({
-    required this.id,
+    this.id = '',
     required this.title,
     required this.message,
     required this.timeStamp,

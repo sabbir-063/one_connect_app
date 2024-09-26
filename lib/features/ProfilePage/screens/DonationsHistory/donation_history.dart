@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:one_connect_app/utils/constants/colors.dart';
 
 import '../../controllers/donation_history.controller.dart';
 
@@ -17,6 +18,7 @@ class DonationHistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Donation History'),
+        backgroundColor: OneColors.accent,
         centerTitle: true,
       ),
       body: Padding(

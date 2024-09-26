@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/curr_user.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../common/widgets/thanks_for_doantion_user.dart';
 import '../../../../models/DonationModel/donation_tracker.dart';
+import '../../../../models/UserModel/user_model.dart';
+import '../../../../models/notificationModel/notification_model.dart';
 
 class DonateNowController extends GetxController {
   var donationNeeded = 0.obs;
@@ -13,8 +16,10 @@ class DonateNowController extends GetxController {
   var phoneNumber = ''.obs;
   var userId = ''.obs;
   var currUser = OneUser.currUserId;
+  var userEmail = OneUser.currUserEmail;
   var postId = ''.obs;
   var isAnonymously = false.obs;
+  var senderEmail = ''.obs;
   final amountController = TextEditingController();
 
   void updateSelectedMethod(String? method) {
@@ -43,6 +48,8 @@ class DonateNowController extends GetxController {
 
   Future<void> _updateDonationDetails(int donationAmount) async {
     final firestore = FirebaseFirestore.instance;
+
+    getUserEmail(userId.value);
 
     // Update donationRaised in the Posts collection
     final postDoc = firestore.collection('Posts').doc(postId.value);
@@ -95,5 +102,65 @@ class DonateNowController extends GetxController {
 
     // Update local donationRaised value
     donationRaised.value += donationAmount;
+
+    //send notification to users
+    sendNotificationToUsers(donationAmount);
+  }
+
+  //send notifications
+  Future<void> sendNotificationToUsers(int amount) async {
+    final firestore = FirebaseFirestore.instance;
+    try {
+      final String notificationId = const Uuid().v4(); // Unique notification ID
+
+      // Create a notification model for donator user
+      NotificationModel notification1 = NotificationModel(
+        message: 'You give $amount taka donation to a user.',
+        title: 'Donation Given',
+        timeStamp: DateTime.now(),
+      );
+
+      // Create a notification model for receiver user
+      NotificationModel notification2 = NotificationModel(
+        message: 'You have received $amount taka donation from a user.',
+        title: 'Donation Received',
+        timeStamp: DateTime.now(),
+      );
+
+      // Add notification to the senders's notifications collection
+      await firestore
+          .collection('Notifications')
+          .doc(senderEmail.value)
+          .collection('UserNotifications')
+          .doc(notificationId)
+          .set(notification1.toMap());
+
+      // Add notification to the receiver's notifications collection
+      await firestore
+          .collection('Notifications')
+          .doc(userEmail)
+          .collection('UserNotifications')
+          .doc(notificationId)
+          .set(notification2.toMap());
+    } catch (e) {
+      throw Exception("Error sending notifications: $e");
+    }
+  }
+
+  Future<void> getUserEmail(String userId) async {
+    final firestore = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot userDoc =
+          await firestore.collection('Users').doc(userId).get();
+      if (userDoc.exists) {
+        UserModel user =
+            UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+        senderEmail.value = user.email;
+      } else {
+        Get.snackbar('Error', 'User not found');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch user details: $e');
+    }
   }
 }

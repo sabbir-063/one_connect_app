@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
 
 import '../../HomePage/screens/community/donation_post_card.dart';
+import '../../notification/screens/notification.dart';
 import '../controllers/profile.controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -45,12 +46,12 @@ class ProfileScreen extends StatelessWidget {
                 value: 0,
                 child: Text('Profile Edit'),
               ),
-              // const PopupMenuItem<int>(
-              //   value: 1,
-              //   child: Text('Notifications'),
-              // ),
               const PopupMenuItem<int>(
                 value: 1,
+                child: Text('Notifications'),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
                 child: Text('Logout'),
               ),
             ],
@@ -219,11 +220,11 @@ class ProfileScreen extends StatelessWidget {
         // Navigate to Edit Profile
         Get.to(() => EditProfileScreen());
         break;
-      // case 1:
-      //   // Handle notifications
-      //   Get.to(() => NotificationScreen());
-      //   break;
       case 1:
+        // Handle notifications
+        Get.to(() => NotificationsPage());
+        break;
+      case 2:
         // Handle logout
         OneUser.currUserId = '0';
         Get.offAll(() => const LoginScreen());
