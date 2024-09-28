@@ -60,6 +60,8 @@ class LoginController extends GetxController {
         if (userId.isNotEmpty) {
           // Initialize ProfileController and fetch user data
           OneUser.currUserId = userId;
+          OneUser.currUserEmail = emailController.text;
+
           await userController.fetchUserData(userId);
           // If login is successful, save credentials
           await UserPreferences.saveUserCredentials(

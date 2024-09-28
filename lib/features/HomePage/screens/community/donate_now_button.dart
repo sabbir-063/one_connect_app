@@ -119,7 +119,7 @@ class DonateNowButtonScreen extends StatelessWidget {
                   title: const Text('Donate Anonymously'),
                   value: controller.isAnonymously.value,
                   onChanged: (bool? value) {
-                    controller.isAnonymously.value = value?? false ;
+                    controller.isAnonymously.value = value ?? false;
                   },
                 ),
               ),

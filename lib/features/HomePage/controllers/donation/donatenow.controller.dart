@@ -120,6 +120,14 @@ class DonateNowController extends GetxController {
         timeStamp: DateTime.now(),
       );
 
+      // Add notification to the senders's notifications collection
+      await firestore
+          .collection('Notifications')
+          .doc(userEmail)
+          .collection('UserNotifications')
+          .doc(notificationId)
+          .set(notification1.toMap());
+
       // Create a notification model for receiver user
       NotificationModel notification2 = NotificationModel(
         message: 'You have received $amount taka donation from a user.',
@@ -127,21 +135,15 @@ class DonateNowController extends GetxController {
         timeStamp: DateTime.now(),
       );
 
-      // Add notification to the senders's notifications collection
+      // Add notification to the receiver's notifications collection
       await firestore
           .collection('Notifications')
           .doc(senderEmail.value)
           .collection('UserNotifications')
           .doc(notificationId)
-          .set(notification1.toMap());
-
-      // Add notification to the receiver's notifications collection
-      await firestore
-          .collection('Notifications')
-          .doc(userEmail)
-          .collection('UserNotifications')
-          .doc(notificationId)
           .set(notification2.toMap());
+
+      print('lol $userEmail ${senderEmail.value}');
     } catch (e) {
       throw Exception("Error sending notifications: $e");
     }
