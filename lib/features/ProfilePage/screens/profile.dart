@@ -222,7 +222,7 @@ class ProfileScreen extends StatelessWidget {
         break;
       case 1:
         // Handle notifications
-        Get.to(() => NotificationsPage());
+        Get.to(() => const NotificationsPage());
         break;
       case 2:
         // Handle logout

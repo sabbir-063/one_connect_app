@@ -60,21 +60,21 @@ class AdminProfileScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() {
                           return Text(
-                            'Admin ${adminController.loggedUser.value.name}',
+                            'Admin : ${adminController.loggedUser.value.name}',
                             style: const TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w400,
                             ),
                           );
                         }),
                         const SizedBox(height: 5),
                         Obx(() {
                           return Text(
-                            adminController.loggedUser.value.email,
+                            'Email : ${adminController.loggedUser.value.email}',
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.grey,
@@ -82,71 +82,104 @@ class AdminProfileScreen extends StatelessWidget {
                           );
                         }),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                const Text(
-                                  'Donations',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Obx(() {
-                                  return Text(
-                                    '${adminController.donationGiven} Tk',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  'Fund Received',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Obx(() {
-                                  return Text(
-                                    '${adminController.fundRaised} Tk',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  'Fund Remaining',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Obx(() {
-                                  return Text(
-                                    '${adminController.totalRemainingCapital} Tk',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                }),
-                              ],
-                            ),
-                          ],
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   children: [
+                        //     Column(
+                        //       children: [
+                        //         const Text(
+                        //           'Donations',
+                        //           style: TextStyle(
+                        //             fontSize: 18,
+                        //             color: Colors.grey,
+                        //           ),
+                        //         ),
+                        // Obx(() {
+                        //   return Text(
+                        //     '${adminController.donationGiven} Tk',
+                        //     style: const TextStyle(
+                        //       fontSize: 20,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //   );
+                        // }),
+                        //       ],
+                        //     ),
+                        //     Column(
+                        //       children: [
+                        //         const Text(
+                        //           'Fund Received',
+                        //           style: TextStyle(
+                        //             fontSize: 18,
+                        //             color: Colors.grey,
+                        //           ),
+                        //         ),
+                        //         Obx(() {
+                        //           return Text(
+                        //             '${adminController.fundRaised} Tk',
+                        //             style: const TextStyle(
+                        //               fontSize: 20,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           );
+                        //         }),
+                        //       ],
+                        //     ),
+                        //     Column(
+                        //       children: [
+                        //         const Text(
+                        //           'Fund Remaining',
+                        //           style: TextStyle(
+                        //             fontSize: 18,
+                        //             color: Colors.grey,
+                        //           ),
+                        //         ),
+                        //         Obx(() {
+                        //           return Text(
+                        //             '${adminController.totalRemainingCapital} Tk',
+                        //             style: const TextStyle(
+                        //               fontSize: 20,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           );
+                        //         }),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                        const Divider(
+                          thickness: 5,
                         ),
+                        const SizedBox(height: 10),
+                        Obx(() {
+                          return Text(
+                            'Donation Given : ${adminController.donationGiven} Tk',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
+                        const SizedBox(height: 15),
+                        Obx(() {
+                          return Text(
+                            'Fund Received : ${adminController.fundRaised} Tk',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
+                        const SizedBox(height: 15),
+                        Obx(() {
+                          return Text(
+                            'Fund Remaining : ${adminController.totalRemainingCapital} Tk',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
                         const SizedBox(height: 15),
                         Obx(() {
                           return Text(
@@ -154,7 +187,13 @@ class AdminProfileScreen extends StatelessWidget {
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold));
                         }),
+                        const SizedBox(height: 10),
+                        const Divider(
+                          thickness: 5,
+                        ),
                         const SizedBox(height: 20),
+
+                        /////////buttons
                         Row(
                           children: [
                             Expanded(
@@ -218,10 +257,12 @@ class AdminProfileScreen extends StatelessWidget {
                         const SizedBox(height: 20),
                         const Divider(),
                         const SizedBox(height: 10),
-                        const Text(
-                          "Admin posts",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
+                        const Center(
+                          child: Text(
+                            "Admin posts",
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
                         ),
 
                         const SizedBox(height: 20),

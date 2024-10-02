@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:one_connect_app/utils/constants/colors.dart';
 import '../controllers/notification.controller.dart';
 
@@ -36,11 +37,17 @@ class NotificationsPage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   elevation: 3,
                   child: ListTile(
-                    title: Text(notification.title),
+                    title: Text(
+                      notification.title,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
                     subtitle: Text(notification.message),
-                    trailing: notification.isRead
-                        ? const Icon(Icons.check, color: Colors.green)
-                        : const Icon(Icons.circle, color: Colors.red),
+                    trailing: Text(DateFormat('yyyy-MM-dd - kk:mm')
+                        .format(notification.timeStamp)),
+                    // trailing: notification.isRead
+                    //     ? const Icon(Icons.check, color: Colors.green)
+                    //     : const Icon(Icons.circle, color: Colors.red),
                   ),
                 );
               }),

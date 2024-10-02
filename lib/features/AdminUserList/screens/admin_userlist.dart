@@ -75,7 +75,7 @@ class AdminUserlistScreen extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            'Donations Given: ${user.donationGiven}', // Donation given
+                            'Donations Given: ${user.donationGiven} taka', // Donation given
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black54,

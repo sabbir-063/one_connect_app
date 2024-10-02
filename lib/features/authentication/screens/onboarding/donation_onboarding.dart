@@ -5,7 +5,10 @@ import 'package:one_connect_app/features/authentication/screens/login/login.dart
 import 'package:one_connect_app/utils/constants/colors.dart';
 
 class DonationOnboardingPage extends StatefulWidget {
+  const DonationOnboardingPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _DonationOnboardingPageState createState() => _DonationOnboardingPageState();
 }
 
@@ -146,7 +149,7 @@ class _DonationOnboardingPageState extends State<DonationOnboardingPage> {
                   final feature = featureList[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
+                        horizontal: 40.0, vertical: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
