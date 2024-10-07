@@ -80,7 +80,7 @@ class EditProfileScreen extends StatelessWidget {
                     controller: TextEditingController(
                         text: controller.loggedUser.value.birthday),
                     decoration: const InputDecoration(labelText: 'Birthday'),
-                    enabled: false,
+                    onChanged: (value) => controller.loggedUser.value.birthday = value,
                   ),
                   const SizedBox(height: 10),
                   TextField(
@@ -95,24 +95,24 @@ class EditProfileScreen extends StatelessWidget {
                         text: controller.loggedUser.value.phone),
                     decoration:
                         const InputDecoration(labelText: 'Phone Number'),
-                    enabled: false,
+                    onChanged: (value) => controller.loggedUser.value.phone = value,
                   ),
                   const SizedBox(height: 10),
-                  TextField(
-                    decoration:
-                        const InputDecoration(labelText: 'Current Password'),
-                    obscureText: true,
-                    onChanged: (value) =>
-                        controller.currentPassword.value = value,
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    decoration:
-                        const InputDecoration(labelText: 'New Password'),
-                    obscureText: true,
-                    onChanged: (value) => controller.newPassword.value = value,
-                  ),
-                  const SizedBox(height: 20),
+                  // TextField(
+                  //   decoration:
+                  //       const InputDecoration(labelText: 'Current Password'),
+                  //   obscureText: true,
+                  //   onChanged: (value) =>
+                  //       controller.currentPassword.value = value,
+                  // ),
+                  // const SizedBox(height: 10),
+                  // TextField(
+                  //   decoration:
+                  //       const InputDecoration(labelText: 'New Password'),
+                  //   obscureText: true,
+                  //   onChanged: (value) => controller.newPassword.value = value,
+                  // ),
+                  // const SizedBox(height: 20),
                   SizedBox(
                     width: double
                         .infinity, // This makes the button take up the full width

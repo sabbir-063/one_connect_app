@@ -6,7 +6,7 @@ import 'package:one_connect_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 // import 'widgets/login_devider.dart';
-// import 'widgets/login_footer.dart';
+import 'widgets/login_footer.dart';
 import 'widgets/login_form.dart';
 import 'widgets/login_title.dart';
 
@@ -30,12 +30,12 @@ class LoginScreen extends StatelessWidget {
               //Divider
               // const DividerText(dividerText: OneTexts.signInWith),
 
-              const SizedBox(height: OneSizes.spaceBtwSections / 2),
+              // const SizedBox(height: OneSizes.spaceBtwSections / 2),
 
               //Footer
-              // const Footer(),
+              const Footer(),
 
-              // const SizedBox(height: OneSizes.spaceBtwSections),
+              const SizedBox(height: OneSizes.spaceBtwSections),
 
               GestureDetector(
                 onTap: () {

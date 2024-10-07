@@ -125,7 +125,6 @@ class OneForm extends StatelessWidget {
                 child: const Text(OneTexts.createAcc),
               ),
             ),
-            const SizedBox(height: OneSizes.spaceBtwSections / 2),
           ],
         ),
       ),

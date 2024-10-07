@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:one_connect_app/curr_user.dart';
+import 'package:one_connect_app/utils/helpers/helper_functions.dart';
 import '../../../../../navigation_bar.dart';
 import '../../../../common/userCredentials/user_preferences.dart';
 import '../../../ProfilePage/controllers/profile.controller.dart';
@@ -69,20 +70,20 @@ class LoginController extends GetxController {
           // Navigate to the main application screen
           Get.offAll(() => const NavigationBarMenu());
 
-          showCustomSnackBar('Success', 'User logged in successfully', true);
+          OneHelperFunctions.showCustomSnackBar('Success', 'User logged in successfully', true);
         } else {
-          showCustomSnackBar('Error', 'Failed to retrieve user ID.', false);
+          OneHelperFunctions.showCustomSnackBar('Error', 'Failed to retrieve user ID.', false);
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          showCustomSnackBar('Error', 'No user found for that email.', false);
+          OneHelperFunctions.showCustomSnackBar('Error', 'No user found for that email.', false);
         } else if (e.code == 'wrong-password') {
-          showCustomSnackBar('Error', 'Wrong password provided.', false);
+          OneHelperFunctions.showCustomSnackBar('Error', 'Wrong password provided.', false);
         } else {
-          showCustomSnackBar('Error', e.message ?? 'An error occurred', false);
+          OneHelperFunctions.showCustomSnackBar('Error', e.message ?? 'An error occurred', false);
         }
       } catch (e) {
-        showCustomSnackBar(
+        OneHelperFunctions.showCustomSnackBar(
             'Error', 'An error occurred. Please try again.', false);
       }
     }
@@ -90,54 +91,23 @@ class LoginController extends GetxController {
 
   bool _validateInputs() {
     if (emailController.text.isEmpty) {
-      showCustomSnackBar('Error', 'Email cannot be empty', false);
+      OneHelperFunctions.showCustomSnackBar('Error', 'Email cannot be empty', false);
       return false;
     }
     if (!GetUtils.isEmail(emailController.text)) {
-      showCustomSnackBar('Error', 'Enter a valid email', false);
+      OneHelperFunctions.showCustomSnackBar('Error', 'Enter a valid email', false);
       return false;
     }
     if (passwordController.text.isEmpty) {
-      showCustomSnackBar('Error', 'Password cannot be empty', false);
+      OneHelperFunctions.showCustomSnackBar('Error', 'Password cannot be empty', false);
       return false;
     }
     if (passwordController.text.length < 8) {
-      showCustomSnackBar(
+      OneHelperFunctions.showCustomSnackBar(
           'Error', 'Password must be at least 8 characters long', false);
       return false;
     }
     return true;
   }
 
-  void showCustomSnackBar(String title, String message, bool isSuccess) {
-    Get.snackbar(
-      title,
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isSuccess ? Colors.green : Colors.red,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-      snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.all(16),
-      borderRadius: 8,
-      barBlur: 0,
-      animationDuration: const Duration(milliseconds: 300),
-      forwardAnimationCurve: Curves.easeOut,
-      reverseAnimationCurve: Curves.easeIn,
-      mainButton: TextButton(
-        onPressed: () {
-          Get.back(); // Close the snackbar
-        },
-        child: const Text(
-          'Dismiss',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      isDismissible: true,
-      showProgressIndicator: true,
-      progressIndicatorValueColor:
-          const AlwaysStoppedAnimation<Color>(Colors.white),
-      progressIndicatorBackgroundColor: Colors.grey,
-    );
-  }
 }

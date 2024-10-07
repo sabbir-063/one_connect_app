@@ -1,6 +1,8 @@
+// import 'dart:math';
+
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:one_connect_app/curr_user.dart';
 
 import '../../../models/UserModel/user_model.dart';
@@ -8,7 +10,7 @@ import '../../../navigation_bar.dart';
 
 class EditProfileController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Rx<UserModel> loggedUser = UserModel(
     firstName: '',
@@ -23,8 +25,8 @@ class EditProfileController extends GetxController {
     password: '',
   ).obs;
 
-  final currentPassword = ''.obs;
-  final newPassword = ''.obs;
+  // final currentPassword = ''.obs;
+  // final newPassword = ''.obs;
 
   Future<void> fetchUserData(String userId) async {
     try {
@@ -44,23 +46,25 @@ class EditProfileController extends GetxController {
       Map<String, dynamic> updateData = {
         'firstName': loggedUser.value.firstName,
         'lastName': loggedUser.value.lastName,
+        'birthday': loggedUser.value.birthday,
         'country': loggedUser.value.country,
         'state': loggedUser.value.state,
         'city': loggedUser.value.city,
+        'phone': loggedUser.value.phone,
       };
 
-      if (currentPassword.isNotEmpty && newPassword.isNotEmpty) {
-        User? user = _auth.currentUser;
-        if (user != null) {
-          final cred = EmailAuthProvider.credential(
-            email: user.email!,
-            password: currentPassword.value,
-          );
+      // if (currentPassword.isNotEmpty && newPassword.isNotEmpty) {
+      //   User? user = _auth.currentUser;
+      //   if (user != null) {
+      //     final cred = EmailAuthProvider.credential(
+      //       email: user.email!,
+      //       password: currentPassword.value,
+      //     );
 
-          await user.reauthenticateWithCredential(cred);
-          await user.updatePassword(newPassword.value);
-        }
-      }
+      //     await user.reauthenticateWithCredential(cred);
+      //     await user.updatePassword(newPassword.value);
+      //   }
+      // }
 
       await _firestore
           .collection('Users')

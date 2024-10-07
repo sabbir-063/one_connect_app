@@ -77,7 +77,8 @@ class ProfileController extends GetxController {
       String filePath = 'profile_pictures/$userId/picture.png';
 
       // Delete the previous profile picture if it exists
-      if (loggedUser.value.profileUrl.isNotEmpty) {
+      if (loggedUser.value.profileUrl.isNotEmpty &&
+          OneUser.isGoogleAccount == false) {
         try {
           await _storage.refFromURL(loggedUser.value.profileUrl).delete();
         } catch (e) {
@@ -107,7 +108,7 @@ class ProfileController extends GetxController {
     }
   }
 
-    Future<String> getUserFullName(String userId) async {
+  Future<String> getUserFullName(String userId) async {
     try {
       DocumentSnapshot userDoc =
           await _firestore.collection('Users').doc(userId).get();

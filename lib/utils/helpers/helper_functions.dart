@@ -73,7 +73,7 @@ class OneHelperFunctions {
     );
   }
 
-  void showCustomSnackBar(String title, String message, bool isSuccess) {
+  static void showCustomSnackBar(String title, String message, bool isSuccess) {
     Get.snackbar(
       title,
       message,

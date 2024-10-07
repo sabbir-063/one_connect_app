@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:one_connect_app/curr_user.dart';
 import 'package:one_connect_app/features/ProfilePage/screens/DonationsHistory/donation_history.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
@@ -225,6 +227,12 @@ class ProfileScreen extends StatelessWidget {
         Get.to(() => const NotificationsPage());
         break;
       case 2:
+        //google signout
+        if (OneUser.isGoogleAccount == true) {
+          OneUser.isGoogleAccount = false;
+          await GoogleSignIn().signOut();
+        }
+        FirebaseAuth.instance.signOut();
         // Handle logout
         OneUser.currUserId = '0';
         Get.offAll(() => const LoginScreen());
