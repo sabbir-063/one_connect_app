@@ -80,7 +80,8 @@ class EditProfileScreen extends StatelessWidget {
                     controller: TextEditingController(
                         text: controller.loggedUser.value.birthday),
                     decoration: const InputDecoration(labelText: 'Birthday'),
-                    onChanged: (value) => controller.loggedUser.value.birthday = value,
+                    onChanged: (value) =>
+                        controller.loggedUser.value.birthday = value,
                   ),
                   const SizedBox(height: 10),
                   TextField(
@@ -95,7 +96,19 @@ class EditProfileScreen extends StatelessWidget {
                         text: controller.loggedUser.value.phone),
                     decoration:
                         const InputDecoration(labelText: 'Phone Number'),
-                    onChanged: (value) => controller.loggedUser.value.phone = value,
+                    onChanged: (value) {
+                      controller.loggedUser.value.phone = value;
+                    },
+                    keyboardType: TextInputType.number,
+                    // validator: (value) {
+                    //   if (value == null || value.isEmpty) {
+                    //     return 'Please enter your phone number';
+                    //   }
+                    //   if (!RegExp(r'^01\d{9}$').hasMatch(value)) {
+                    //     return 'Phone number must start with 01 and be 11 digits long';
+                    //   }
+                    //   return null;
+                    // },
                   ),
                   const SizedBox(height: 10),
                   // TextField(

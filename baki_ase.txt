@@ -23,6 +23,18 @@ auto login ekber login korle
 cache auto on na kora
 password hasing
 
+      // Create a notification model for donator user
+      NotificationModel notification1 = NotificationModel(
+        message: 'You give $amount taka donation to a user.',
+        title: 'Donation Given',
+        timeStamp: DateTime.now(),
+      );
+
+      // Add notification to the senders's notifications collection
+      await firestore.collection('Notifications').doc(userEmail).collection('UserNotifications').add(notification1.toMap());
+
+      await firestore.collection('DonationTracker').add(newDonation.toMap());
+
 
 
 

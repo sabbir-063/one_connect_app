@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../../curr_user.dart';
 import '../../../models/CreatePostModel/admin_post_model.dart';
+import '../../../models/notificationModel/notification_model.dart';
 import '../screens/admin_post_confirmation.dart';
 
 class AdminCreatePostDonationController extends GetxController {
@@ -95,6 +96,7 @@ class AdminCreatePostDonationController extends GetxController {
 
       await _firestore.collection('AdminPosts').add(newPost.toMap());
       Get.to(() => const AdminPostConfirmationPage());
+      sendNotificationToAllUsers();
     } catch (e) {
       Get.snackbar('Error', 'Failed to create post: $e',
           backgroundColor: Colors.red, colorText: Colors.white);
@@ -113,5 +115,29 @@ class AdminCreatePostDonationController extends GetxController {
       imageUrls.add(downloadUrl);
     }
     return imageUrls;
+  }
+
+  Future<void> sendNotificationToAllUsers() async {
+    try {
+      final userSnapshots = await _firestore.collection('Users').get();
+      for (var userDoc in userSnapshots.docs) {
+        final String email = userDoc['email'];
+              // Create a notification model for donator user
+        NotificationModel notification1 = NotificationModel(
+          message: 'OneConnect admin gives a new donation post. Check this post in Admin donation posts section.',
+          title: 'New Admin Donation Post',
+          timeStamp: DateTime.now(),
+        );
+
+        // Add notification to the senders's notifications collection
+        await _firestore
+            .collection('Notifications')
+            .doc(email)
+            .collection('UserNotifications')
+            .add(notification1.toMap());
+      }
+    } catch (e) {
+      print('Error sending admin donation post notification : $e');
+    }
   }
 }

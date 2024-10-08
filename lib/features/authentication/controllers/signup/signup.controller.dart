@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
+import 'package:one_connect_app/utils/helpers/helper_functions.dart';
 import '../../../../../models/UserModel/user_model.dart';
 import '../../../../curr_user.dart';
 
@@ -28,7 +29,7 @@ class SignUpController extends GetxController {
     if (formKey.currentState!.validate()) {
       try {
         if (await _isEmailOrPhoneNumberUsed()) {
-          showCustomSnackBar(
+          OneHelperFunctions.showCustomSnackBar(
               'Error', 'Email or phone number already in use.', false);
           return;
         }
@@ -82,20 +83,20 @@ class SignUpController extends GetxController {
         await saveUserToFirestore(userCredential.user!.uid, newUser);
 
         Get.offAll(() => const LoginScreen());
-        showCustomSnackBar('Success', 'User registered successfully', true);
+        OneHelperFunctions.showCustomSnackBar('Success', 'User registered successfully', true);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          showCustomSnackBar(
+          OneHelperFunctions.showCustomSnackBar(
               'Error', 'The password provided is too weak.', false);
         } else if (e.code == 'email-already-in-use') {
-          showCustomSnackBar(
+          OneHelperFunctions.showCustomSnackBar(
               'Error', 'The account already exists for that email.', false);
         } else {
-          showCustomSnackBar('Error',
+          OneHelperFunctions.showCustomSnackBar('Error',
               e.message ?? 'Firebase Auth Exception error occurred', false);
         }
       } catch (e) {
-        showCustomSnackBar(
+        OneHelperFunctions.showCustomSnackBar(
             'Error', 'An error occurred. Please try again.', false);
       }
     }
@@ -124,38 +125,6 @@ class SignUpController extends GetxController {
     } catch (e) {
       throw Exception('Failed to save user data');
     }
-  }
-
-  void showCustomSnackBar(String title, String message, bool isSuccess) {
-    Get.snackbar(
-      title,
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isSuccess ? Colors.green : Colors.red,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-      snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.all(16),
-      borderRadius: 8,
-      barBlur: 0,
-      animationDuration: const Duration(milliseconds: 300),
-      forwardAnimationCurve: Curves.easeOut,
-      reverseAnimationCurve: Curves.easeIn,
-      mainButton: TextButton(
-        onPressed: () {
-          Get.back(); // Close the snackbar
-        },
-        child: const Text(
-          'Dismiss',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      isDismissible: true,
-      showProgressIndicator: true,
-      progressIndicatorValueColor:
-          const AlwaysStoppedAnimation<Color>(Colors.white),
-      progressIndicatorBackgroundColor: Colors.grey,
-    );
   }
 
   @override
