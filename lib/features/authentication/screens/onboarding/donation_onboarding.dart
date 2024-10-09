@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/features/authentication/screens/login/login.dart';
@@ -102,6 +103,17 @@ class _DonationOnboardingPageState extends State<DonationOnboardingPage> {
   @override
   void initState() {
     super.initState();
+    // Delay the notification permission request to ensure the UI is ready
+    Future.delayed(const Duration(milliseconds: 500), () {
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+        if (isAllowed) {
+          print("Notifications are already allowed.");
+        } else {
+          print("Requesting notification permissions.");
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      });
+    });
 
     // Auto-scroll timer to move to the next slide
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {

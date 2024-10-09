@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       theme: OneAppTheme.lightTheme,
       // darkTheme: OneAppTheme.darkTheme,
       // home: const OnBoardingScreen(),
-      home: DonationOnboardingPage(),
+      home: const DonationOnboardingPage(),
       // home: const Scaffold(),
     );
   }

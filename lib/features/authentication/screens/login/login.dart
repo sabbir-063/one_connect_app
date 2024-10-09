@@ -1,3 +1,4 @@
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:get/get.dart';
 import 'package:one_connect_app/common/styles/spacing_styles.dart';
 import 'package:one_connect_app/features/authentication/screens/AdminLogin/admin_login.dart';
@@ -15,6 +16,15 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use WidgetsBinding to request permission after the first frame is built
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    //     if (!isAllowed) {
+    //       AwesomeNotifications().requestPermissionToSendNotifications();
+    //     }
+    //   });
+    // });
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
