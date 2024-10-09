@@ -44,18 +44,10 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   google_sign_in: ^6.2.1
   awesome_notifications: ^0.9.3+1
-  flutter_launcher_icons: ^0.14.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: "AppIcon"
-  image_path: "assets/logos/oneconnect.png"
-  min_sdk_android: 23
-  remove_alpha_ios: true
 
 
   flutter_lints: ^3.0.0
